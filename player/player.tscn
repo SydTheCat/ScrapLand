@@ -1,0 +1,320 @@
+[gd_scene format=3 uid="uid://t767blqdegkd"]
+
+[ext_resource type="Script" uid="uid://dcdyyp4ibdvqi" path="res://player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://bnh8kuqtn12ph" path="res://player/camera_rig.gd" id="2_camera"]
+[ext_resource type="Script" uid="uid://chb1knfedk5wd" path="res://player/battery.gd" id="3_battery"]
+[ext_resource type="Script" uid="uid://cp7n1jgvr5pc8" path="res://player/robot_effects.gd" id="4_effects"]
+[ext_resource type="Script" uid="uid://c6q1d8infyf88" path="res://audio/tone_player.gd" id="5_tone"]
+[ext_resource type="Script" uid="uid://dk6kacpam8i6q" path="res://player/interactor.gd" id="6_interactor"]
+[ext_resource type="Script" uid="uid://ms7301jeq0qa" path="res://inventory/inventory.gd" id="7_inventory"]
+[ext_resource type="Script" uid="uid://b62duve2vin8e" path="res://player/equipment.gd" id="8_equipment"]
+[ext_resource type="Script" uid="uid://eggpicnou3v1" path="res://crafting/crafting.gd" id="9_crafting"]
+[ext_resource type="Script" uid="uid://cbqup44qucvr8" path="res://player/item_user.gd" id="10_item_user"]
+[ext_resource type="Resource" path="res://crafting/recipes/scrap_pick.tres" id="11_r_pick"]
+[ext_resource type="Resource" path="res://crafting/recipes/repair_tool.tres" id="12_r_repair"]
+[ext_resource type="Resource" path="res://crafting/recipes/portable_battery.tres" id="13_r_battery"]
+[ext_resource type="Resource" path="res://crafting/recipes/storage_box.tres" id="14_r_box"]
+[ext_resource type="Resource" path="res://crafting/recipes/basic_workbench.tres" id="15_r_bench"]
+[ext_resource type="Script" uid="uid://1ygfgwujl15k" path="res://player/player_tool.gd" id="16_tool"]
+[ext_resource type="Script" uid="uid://1uyjhfivu5mf" path="res://building/builder.gd" id="17_builder"]
+[ext_resource type="Script" path="res://player/hotbar.gd" id="18_hotbar"]
+[ext_resource type="Resource" path="res://crafting/recipes/furnace.tres" id="19_r_furnace"]
+[ext_resource type="Script" path="res://player/hull.gd" id="20_hull"]
+[ext_resource type="Script" uid="uid://qud22yg06xlf" path="res://player/rusty_robot.gd" id="21_rusty"]
+[ext_resource type="PackedScene" uid="uid://cwfehtw7hpu1q" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_Walking_withSkin.glb" id="22_walk"]
+[ext_resource type="PackedScene" uid="uid://cyt4o146wmg1b" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_Running_withSkin.glb" id="23_run"]
+[ext_resource type="PackedScene" uid="uid://doali0ynyq1tl" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_01a0a74c-f43e-76db-9425-f8beb81d473b_withSkin.glb" id="24_idle"]
+[ext_resource type="PackedScene" uid="uid://bramptoif7ji4" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_Jump_and_Grab_Wall_withSkin.glb" id="25_jump"]
+[ext_resource type="PackedScene" uid="uid://dca3ca25fjcxa" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_01a0a74f-682e-7580-bf8b-7675f29cf7e2_withSkin.glb" id="26_idle_alt"]
+[ext_resource type="Script" path="res://player/upgrades.gd" id="27_upgrades"]
+[ext_resource type="Resource" path="res://crafting/recipes/cargo_rack.tres" id="28_r_rack"]
+[ext_resource type="Resource" path="res://crafting/recipes/hull_plating.tres" id="29_r_plate"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_player"]
+radius = 0.3
+height = 1.1
+
+[sub_resource type="StandardMaterial3D" id="Mat_glow_battery"]
+albedo_color = Color(0.5, 1, 0.5, 1)
+emission_enabled = true
+emission = Color(0.3, 1, 0.4, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="BoxMesh" id="Mesh_battery_indicator"]
+material = SubResource("Mat_glow_battery")
+size = Vector3(0.18, 0.05, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="Mat_dark"]
+albedo_color = Color(0.15, 0.16, 0.19, 1)
+metallic = 0.4
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.58, 0.6, 0.63, 1)
+metallic = 0.8
+roughness = 0.45
+
+[sub_resource type="CylinderMesh" id="Mesh_tool"]
+material = SubResource("Mat_dark")
+top_radius = 0.035
+bottom_radius = 0.055
+height = 0.24
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="Mesh_pick_haft"]
+material = SubResource("Mat_dark")
+top_radius = 0.022
+bottom_radius = 0.026
+height = 0.34
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="Mesh_pick_spike"]
+material = SubResource("Mat_metal")
+top_radius = 0.006
+bottom_radius = 0.045
+height = 0.2
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="Mesh_pick_heel"]
+material = SubResource("Mat_metal")
+size = Vector3(0.05, 0.09, 0.07)
+
+[sub_resource type="StandardMaterial3D" id="Mat_weld_tip"]
+albedo_color = Color(0.55, 0.9, 1, 1)
+emission_enabled = true
+emission = Color(0.4, 0.85, 1, 1)
+emission_energy_multiplier = 4.5
+
+[sub_resource type="CylinderMesh" id="Mesh_weld_body"]
+material = SubResource("Mat_metal")
+top_radius = 0.018
+bottom_radius = 0.028
+height = 0.22
+radial_segments = 8
+
+[sub_resource type="SphereMesh" id="Mesh_weld_tip"]
+material = SubResource("Mat_weld_tip")
+radius = 0.028
+height = 0.056
+
+[sub_resource type="ParticleProcessMaterial" id="Spark_process"]
+direction = Vector3(0, 1, 0)
+spread = 80.0
+initial_velocity_min = 1.2
+initial_velocity_max = 3.0
+damping_min = 1.0
+damping_max = 2.5
+scale_min = 0.5
+scale_max = 1.2
+color = Color(1, 0.8, 0.35, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_spark"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.92, 0.7, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="Mesh_spark"]
+material = SubResource("Mat_spark")
+size = Vector2(0.035, 0.035)
+
+[sub_resource type="SphereShape3D" id="Shape_interactor"]
+radius = 3.2
+
+[node name="Player" type="CharacterBody3D" unique_id=394528709 groups=["player"]]
+collision_layer = 2
+floor_snap_length = 0.3
+script = ExtResource("1_player")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1354283730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001331687, 0.546731, -0.0024422407)
+shape = SubResource("Shape_player")
+
+[node name="RobotModel" type="Node3D" parent="." unique_id=351982475]
+script = ExtResource("21_rusty")
+idle_scene = ExtResource("24_idle")
+run_scene = ExtResource("23_run")
+air_scene = ExtResource("25_jump")
+idle_alt_scene = ExtResource("26_idle_alt")
+
+[node name="Visual" parent="RobotModel" instance=ExtResource("22_walk")]
+
+[node name="BatteryIndicator" type="MeshInstance3D" parent="RobotModel" unique_id=205442959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63, -0.2)
+mesh = SubResource("Mesh_battery_indicator")
+
+[node name="Head" type="Node3D" parent="RobotModel" unique_id=1098649872]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Flashlight" type="SpotLight3D" parent="RobotModel/Head" unique_id=1471957517]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.13, 0.12)
+visible = false
+light_color = Color(1, 0.97, 0.85, 1)
+light_energy = 6.0
+shadow_enabled = true
+spot_range = 14.0
+spot_angle = 32.0
+spot_angle_attenuation = 0.6
+
+[node name="ArmRight" type="Node3D" parent="RobotModel" unique_id=1670166486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0.72, 0)
+
+[node name="ToolAttachment" type="Marker3D" parent="RobotModel/ArmRight" unique_id=461703340]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.38, 0)
+
+[node name="SalvageHead" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment" unique_id=1182398779]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.1)
+mesh = SubResource("Mesh_tool")
+
+[node name="PickHead" type="Node3D" parent="RobotModel/ArmRight/ToolAttachment" unique_id=251152614]
+visible = false
+
+[node name="Haft" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/PickHead" unique_id=589152917]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.15)
+mesh = SubResource("Mesh_pick_haft")
+
+[node name="Spike" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/PickHead" unique_id=1304896205]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, -0.08, -0.29)
+mesh = SubResource("Mesh_pick_spike")
+
+[node name="Heel" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/PickHead" unique_id=378728544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.29)
+mesh = SubResource("Mesh_pick_heel")
+
+[node name="WeldHead" type="Node3D" parent="RobotModel/ArmRight/ToolAttachment"]
+visible = false
+
+[node name="Body" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/WeldHead"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.12)
+mesh = SubResource("Mesh_weld_body")
+
+[node name="Tip" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/WeldHead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.26)
+mesh = SubResource("Mesh_weld_tip")
+
+[node name="Sparks" type="GPUParticles3D" parent="RobotModel" unique_id=229523543]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0.2)
+emitting = false
+amount = 14
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.95
+process_material = SubResource("Spark_process")
+draw_pass_1 = SubResource("Mesh_spark")
+
+[node name="UpgradePoints" type="Node3D" parent="RobotModel" unique_id=711245806]
+
+[node name="BackSlot" type="Marker3D" parent="RobotModel/UpgradePoints" unique_id=740864026]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0.33)
+
+[node name="ChassisSlot" type="Marker3D" parent="RobotModel/UpgradePoints" unique_id=1488210525]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.2)
+
+[node name="HeadSlot" type="Marker3D" parent="RobotModel/UpgradePoints" unique_id=981792180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+
+[node name="ArmSlot" type="Marker3D" parent="RobotModel/UpgradePoints" unique_id=1746329516]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0.34, 0)
+
+[node name="LegSlot" type="Marker3D" parent="RobotModel/UpgradePoints" unique_id=1341758161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1421353261]
+script = ExtResource("2_camera")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig" unique_id=1428760246]
+transform = Transform3D(1, 0, 0, 0, 0.9781476, 0.2079117, 0, -0.2079117, 0.9781476, 0, 0, 0)
+spring_length = 4.5
+margin = 0.3
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D" unique_id=2139339163]
+fov = 70.0
+
+[node name="Battery" type="Node" parent="." unique_id=897929272]
+script = ExtResource("3_battery")
+
+[node name="Hull" type="Node" parent="."]
+script = ExtResource("20_hull")
+
+[node name="Upgrades" type="Node" parent="."]
+script = ExtResource("27_upgrades")
+
+[node name="Inventory" type="Node" parent="." unique_id=724065533]
+script = ExtResource("7_inventory")
+
+[node name="BatteryEffects" type="Node" parent="." unique_id=1127001226]
+script = ExtResource("4_effects")
+
+[node name="Beeper" type="AudioStreamPlayer" parent="." unique_id=1699399549]
+volume_db = -6.0
+script = ExtResource("5_tone")
+
+[node name="Interactor" type="Area3D" parent="." unique_id=247713312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("6_interactor")
+
+[node name="Shape" type="CollisionShape3D" parent="Interactor" unique_id=628479805]
+shape = SubResource("Shape_interactor")
+
+[node name="Tools" type="Node" parent="." unique_id=2043822330]
+script = ExtResource("8_equipment")
+
+[node name="SalvageArm" type="Node" parent="Tools" unique_id=2091976868]
+script = ExtResource("16_tool")
+display_name = "Salvage Beam"
+item_id = "salvage_beam"
+always_owned = true
+attachment_path = NodePath("../../RobotModel/ArmRight/ToolAttachment/SalvageHead")
+
+[node name="ScrapPick" type="Node" parent="Tools" unique_id=83140063]
+script = ExtResource("16_tool")
+display_name = "Scrap Pick"
+item_id = "scrap_pick"
+damage_per_second = 55.0
+energy_per_second = 2.2
+arm_aim_degrees = 48.0
+swing_enabled = true
+swing_degrees = 34.0
+swing_speed = 7.5
+buzz_interval = 0.34
+buzz_frequency_min = 85.0
+buzz_frequency_max = 135.0
+buzz_length_scale = 0.5
+attachment_path = NodePath("../../RobotModel/ArmRight/ToolAttachment/PickHead")
+
+[node name="RepairTorch" type="Node" parent="Tools"]
+script = ExtResource("16_tool")
+display_name = "Repair Tool"
+item_id = "repair_tool"
+energy_per_second = 1.8
+arm_aim_degrees = 54.0
+buzz_interval = 0.06
+buzz_frequency_min = 240.0
+buzz_frequency_max = 380.0
+buzz_length_scale = 1.2
+work_kind = 1
+repair_per_second = 16.0
+repair_item_id = "scrap_metal"
+repair_per_item = 22.0
+attachment_path = NodePath("../../RobotModel/ArmRight/ToolAttachment/WeldHead")
+
+[node name="Hotbar" type="Node" parent="."]
+script = ExtResource("18_hotbar")
+
+[node name="Builder" type="Node" parent="." unique_id=367141049]
+script = ExtResource("17_builder")
+
+[node name="Crafting" type="Node" parent="." unique_id=926234658]
+script = ExtResource("9_crafting")
+recipes = Array[Resource]([ExtResource("11_r_pick"), ExtResource("12_r_repair"), ExtResource("13_r_battery"), ExtResource("14_r_box"), ExtResource("15_r_bench"), ExtResource("19_r_furnace"), ExtResource("28_r_rack"), ExtResource("29_r_plate")])
+
+[node name="ItemUser" type="Node" parent="." unique_id=313238541]
+script = ExtResource("10_item_user")

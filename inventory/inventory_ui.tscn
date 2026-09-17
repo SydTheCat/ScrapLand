@@ -1,0 +1,141 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://inventory/inventory_ui.gd" id="1_inv_ui"]
+[ext_resource type="PackedScene" path="res://inventory/inventory_slot_ui.tscn" id="2_slot"]
+
+[sub_resource type="StyleBoxFlat" id="Style_frame"]
+bg_color = Color(0.07, 0.08, 0.1, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.32, 0.35, 0.4, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="InventoryUI" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_inv_ui")
+slot_scene = ExtResource("2_slot")
+
+[node name="Root" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Dim" type="ColorRect" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.02, 0.03, 0.6)
+
+[node name="Frame" type="PanelContainer" parent="Root"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -430.0
+offset_top = -300.0
+offset_right = 430.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_frame")
+
+[node name="Margin" type="MarginContainer" parent="Root/Frame"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="VBox" type="VBoxContainer" parent="Root/Frame/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Root/Frame/Margin/VBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.45, 1)
+theme_override_font_sizes/font_size = 24
+text = "CARGO HOLD"
+
+[node name="Capacity" type="Label" parent="Root/Frame/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.68, 0.72, 0.78, 1)
+theme_override_font_sizes/font_size = 15
+text = "0 / 20 slots used"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Rule" type="HSeparator" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+
+[node name="Body" type="HBoxContainer" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Grid" type="GridContainer" parent="Root/Frame/Margin/VBox/Body"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 5
+
+[node name="Details" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DetailName" type="Label" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.88, 0.92, 1)
+theme_override_font_sizes/font_size = 21
+text = "Cargo Hold"
+autowrap_mode = 3
+
+[node name="DetailMeta" type="Label" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.65, 0.72, 1)
+theme_override_font_sizes/font_size = 13
+text = "Hover a slot for details"
+autowrap_mode = 3
+
+[node name="Rule2" type="HSeparator" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+
+[node name="DetailDescription" type="Label" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.82, 0.84, 0.86, 1)
+theme_override_font_sizes/font_size = 15
+text = "Everything you have managed to pick up."
+autowrap_mode = 3
+
+[node name="UseButton" type="Button" parent="Root/Frame/Margin/VBox/Body/Details"]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "USE"
+
+[node name="Footer" type="Label" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.6, 0.66, 1)
+theme_override_font_sizes/font_size = 13
+text = "TAB — close"
+horizontal_alignment = 2

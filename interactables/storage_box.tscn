@@ -1,0 +1,117 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://interactables/storage_box.gd" id="1_box"]
+[ext_resource type="Script" path="res://inventory/inventory.gd" id="2_inventory"]
+[ext_resource type="Script" path="res://interactables/interactable.gd" id="3_interactable"]
+[ext_resource type="Script" path="res://audio/crate_sfx.gd" id="4_sfx"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_crate"]
+albedo_color = Color(0.22, 0.34, 0.38, 1)
+metallic = 0.3
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="Mat_strap"]
+albedo_color = Color(0.55, 0.57, 0.6, 1)
+metallic = 0.8
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_accent"]
+albedo_color = Color(0.95, 0.62, 0.18, 1)
+metallic = 0.3
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_body"]
+material = SubResource("Mat_crate")
+size = Vector3(0.9, 0.55, 0.7)
+
+[sub_resource type="BoxMesh" id="Mesh_lid"]
+material = SubResource("Mat_strap")
+size = Vector3(0.95, 0.09, 0.75)
+
+[sub_resource type="BoxMesh" id="Mesh_strap"]
+material = SubResource("Mat_strap")
+size = Vector3(0.07, 0.58, 0.73)
+
+[sub_resource type="BoxMesh" id="Mesh_latch"]
+material = SubResource("Mat_accent")
+size = Vector3(0.16, 0.13, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_foot"]
+material = SubResource("Mat_strap")
+size = Vector3(0.12, 0.07, 0.12)
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(0.9, 0.66, 0.7)
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 1.1
+
+[node name="StorageBox" type="StaticBody3D"]
+script = ExtResource("1_box")
+display_name = "Storage Box"
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="LidHinge" type="Node3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.575, -0.375)
+
+[node name="Lid" type="MeshInstance3D" parent="Model/LidHinge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0.375)
+mesh = SubResource("Mesh_lid")
+
+[node name="Latch" type="MeshInstance3D" parent="Model/LidHinge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.075, 0.735)
+mesh = SubResource("Mesh_latch")
+
+[node name="StrapLeft" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 0.31, 0)
+mesh = SubResource("Mesh_strap")
+
+[node name="StrapRight" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.31, 0)
+mesh = SubResource("Mesh_strap")
+
+[node name="FootFrontLeft" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0.035, 0.26)
+mesh = SubResource("Mesh_foot")
+
+[node name="FootFrontRight" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0.035, 0.26)
+mesh = SubResource("Mesh_foot")
+
+[node name="FootBackLeft" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0.035, -0.26)
+mesh = SubResource("Mesh_foot")
+
+[node name="FootBackRight" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0.035, -0.26)
+mesh = SubResource("Mesh_foot")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33, 0)
+shape = SubResource("Shape_body")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("2_inventory")
+slot_count = 12
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_interactable")
+prompt_verb = "Open"
+prompt_label = "Storage Box"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("Shape_interact")
+
+[node name="Sfx" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+max_distance = 16.0
+unit_size = 8.0
+script = ExtResource("4_sfx")

@@ -1,0 +1,219 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://ui/hud.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://ui/battery_meter.tscn" id="2_meter"]
+[ext_resource type="PackedScene" path="res://ui/tool_slots.tscn" id="3_tool_slots"]
+[ext_resource type="PackedScene" path="res://ui/clock_readout.tscn" id="4_clock"]
+[ext_resource type="PackedScene" path="res://ui/hull_meter.tscn" id="5_hull"]
+
+[sub_resource type="StyleBoxFlat" id="Style_salvage_track"]
+bg_color = Color(0.05, 0.06, 0.08, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.42, 0.47, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="MessageLabel" type="Label" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 72.0
+offset_bottom = 116.0
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 26
+text = "SYSTEM ONLINE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ObjectiveCaption" type="Label" parent="."]
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 300.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.65, 0.72, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+text = "OBJECTIVE"
+
+[node name="ObjectiveLabel" type="Label" parent="."]
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 40.0
+offset_right = 460.0
+offset_bottom = 100.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 17
+text = "..."
+autowrap_mode = 3
+
+[node name="InteractPrompt" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -168.0
+offset_right = 320.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 22
+text = "E — Use"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SalvageBar" type="Control" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -232.0
+offset_right = 220.0
+offset_bottom = -182.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="SalvageBar"]
+layout_mode = 0
+offset_right = 440.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.45, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 16
+text = "SALVAGING"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Track" type="Panel" parent="SalvageBar"]
+layout_mode = 0
+offset_top = 28.0
+offset_right = 440.0
+offset_bottom = 48.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_salvage_track")
+
+[node name="Fill" type="ColorRect" parent="SalvageBar"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 31.0
+offset_right = 437.0
+offset_bottom = 45.0
+mouse_filter = 2
+color = Color(1, 0.62, 0.2, 1)
+
+[node name="ClockReadout" parent="." instance=ExtResource("4_clock")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -248.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = 80.0
+grow_horizontal = 0
+
+[node name="HullMeter" parent="." instance=ExtResource("5_hull")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 88.0
+offset_right = -24.0
+offset_bottom = 160.0
+grow_horizontal = 0
+
+[node name="BatteryMeter" parent="." instance=ExtResource("2_meter")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 168.0
+offset_right = -24.0
+offset_bottom = 240.0
+grow_horizontal = 0
+
+[node name="HotbarLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="ToolSlots" parent="HotbarLayer" instance=ExtResource("3_tool_slots")]
+
+[node name="ShutdownOverlay" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Fade" type="ColorRect" parent="ShutdownOverlay"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.02, 0.02, 0.03, 0.8)
+
+[node name="Title" type="Label" parent="ShutdownOverlay"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -56.0
+offset_right = 320.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.28, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 44
+text = "SYSTEM SHUTDOWN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="ShutdownOverlay"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = 0.0
+offset_right = 320.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.75, 0.78, 0.82, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Restoring from last known good state..."
+horizontal_alignment = 1
+vertical_alignment = 1

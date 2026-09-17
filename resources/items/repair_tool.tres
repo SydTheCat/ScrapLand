@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = "repair_tool"
+display_name = "Repair Tool"
+description = "Hold to weld. Patches your chassis (costs scrap) and broken machines."
+category = 1
+color = Color(0.5, 0.8, 0.92, 1)
+max_stack = 1

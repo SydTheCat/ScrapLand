@@ -1,0 +1,165 @@
+[gd_scene load_steps=20 format=3]
+
+[ext_resource type="Script" path="res://interactables/furnace.gd" id="1_furnace"]
+[ext_resource type="Script" path="res://inventory/inventory.gd" id="2_inventory"]
+[ext_resource type="Script" path="res://interactables/interactable.gd" id="3_interactable"]
+[ext_resource type="AudioStream" uid="uid://58q4jqbtlqk5" path="res://audio/burning_furnace_SFX.mp3" id="4_fire"]
+[ext_resource type="Resource" path="res://crafting/recipes/smelt_scrap.tres" id="5_smelt"]
+[ext_resource type="PackedScene" uid="uid://qgqcpvlspji5" path="res://Assets/ForgeCore_Furnace.glb" id="6_model"]
+
+[sub_resource type="BoxShape3D" id="Shape_body"]
+size = Vector3(1.9, 1.67, 1.39)
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 1.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_scrap"]
+albedo_color = Color(0.64, 0.58, 0.52, 1)
+metallic = 0.65
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_rust"]
+albedo_color = Color(0.6, 0.31, 0.16, 1)
+metallic = 0.35
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+material = SubResource("Mat_scrap")
+size = Vector3(0.34, 0.05, 0.26)
+
+[sub_resource type="BoxMesh" id="Mesh_chunk"]
+material = SubResource("Mat_scrap")
+size = Vector3(0.16, 0.14, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_bar"]
+material = SubResource("Mat_rust")
+size = Vector3(0.06, 0.06, 0.4)
+
+[sub_resource type="CylinderMesh" id="Mesh_bolt"]
+material = SubResource("Mat_rust")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.12
+radial_segments = 6
+
+[sub_resource type="Gradient" id="Smoke_grad"]
+offsets = PackedFloat32Array(0, 0.28, 1)
+colors = PackedColorArray(0.48, 0.45, 0.42, 0.7, 0.32, 0.31, 0.3, 0.35, 0.2, 0.2, 0.2, 0)
+
+[sub_resource type="GradientTexture1D" id="Smoke_ramp"]
+gradient = SubResource("Smoke_grad")
+
+[sub_resource type="ParticleProcessMaterial" id="Smoke_process"]
+emission_shape = 1
+emission_sphere_radius = 0.05
+direction = Vector3(0.12, 1, 0.04)
+spread = 14.0
+initial_velocity_min = 0.35
+initial_velocity_max = 0.8
+gravity = Vector3(0.18, 0.55, 0)
+damping_min = 0.15
+damping_max = 0.4
+scale_min = 0.55
+scale_max = 1.35
+color = Color(0.42, 0.4, 0.38, 1)
+color_ramp = SubResource("Smoke_ramp")
+
+[sub_resource type="StandardMaterial3D" id="Mat_smoke"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.5, 0.48, 0.45, 0.55)
+billboard_mode = 3
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="Mesh_smoke"]
+material = SubResource("Mat_smoke")
+size = Vector2(0.22, 0.22)
+
+[node name="Furnace" type="StaticBody3D"]
+script = ExtResource("1_furnace")
+display_name = "Furnace"
+recipes = Array[Resource]([ExtResource("5_smelt")])
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Visual" parent="Model" instance=ExtResource("6_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.838, 0)
+
+[node name="FireLight" type="OmniLight3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0.42)
+visible = false
+light_color = Color(1, 0.45, 0.15, 1)
+light_energy = 0.0
+omni_range = 4.5
+omni_attenuation = 1.4
+
+[node name="Charge" type="Node3D" parent="Model"]
+transform = Transform3D(0.62, 0, 0, 0, 0.62, 0, 0, 0, 0.62, 0, 0.3, 0.32)
+visible = false
+
+[node name="PlateLower" type="MeshInstance3D" parent="Model/Charge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+rotation_degrees = Vector3(0, 18, 0)
+mesh = SubResource("Mesh_plate")
+
+[node name="PlateUpper" type="MeshInstance3D" parent="Model/Charge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.09, -0.04)
+rotation_degrees = Vector3(0, -34, 9)
+mesh = SubResource("Mesh_plate")
+
+[node name="Chunk" type="MeshInstance3D" parent="Model/Charge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11, 0.15, 0.07)
+rotation_degrees = Vector3(6, 42, 0)
+mesh = SubResource("Mesh_chunk")
+
+[node name="Bar" type="MeshInstance3D" parent="Model/Charge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.2, 0.01)
+rotation_degrees = Vector3(0, 62, 22)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bolt" type="MeshInstance3D" parent="Model/Charge"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 0.05, 0.13)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("Mesh_bolt")
+
+[node name="Smoke" type="GPUParticles3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.68, -0.12)
+emitting = false
+amount = 28
+lifetime = 2.1
+preprocess = 0.4
+randomness = 0.45
+visibility_aabb = AABB(-1.2, -0.2, -1.2, 2.4, 3.2, 2.4)
+process_material = SubResource("Smoke_process")
+draw_pass_1 = SubResource("Mesh_smoke")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.835, 0)
+shape = SubResource("Shape_body")
+
+[node name="Input" type="Node" parent="."]
+script = ExtResource("2_inventory")
+slot_count = 4
+
+[node name="Output" type="Node" parent="."]
+script = ExtResource("2_inventory")
+slot_count = 4
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_interactable")
+prompt_verb = "Use"
+prompt_label = "Furnace"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("Shape_interact")
+
+[node name="Sfx" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+stream = ExtResource("4_fire")
+volume_db = -8.0
+max_distance = 18.0
+unit_size = 8.0

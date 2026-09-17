@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://resources/resource_pickup.gd" id="1_pickup"]
+[ext_resource type="Script" path="res://interactables/interactable.gd" id="2_interactable"]
+[ext_resource type="Resource" path="res://resources/items/copper.tres" id="3_item"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_copper"]
+albedo_color = Color(0.86, 0.43, 0.18, 1)
+metallic = 0.9
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_dark"]
+albedo_color = Color(0.16, 0.16, 0.19, 1)
+metallic = 0.4
+roughness = 0.7
+
+[sub_resource type="TorusMesh" id="Mesh_coil"]
+material = SubResource("Mat_copper")
+inner_radius = 0.09
+outer_radius = 0.17
+rings = 20
+
+[sub_resource type="CylinderMesh" id="Mesh_spool"]
+material = SubResource("Mat_dark")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.24
+
+[sub_resource type="CylinderMesh" id="Mesh_offcut"]
+material = SubResource("Mat_copper")
+top_radius = 0.03
+bottom_radius = 0.03
+height = 0.3
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 0.7
+
+[node name="CopperScrap" type="Node3D"]
+script = ExtResource("1_pickup")
+item = ExtResource("3_item")
+amount = 2
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Spool" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 0.13, 0)
+mesh = SubResource("Mesh_spool")
+
+[node name="CoilLower" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 0.07, 0)
+mesh = SubResource("Mesh_coil")
+
+[node name="CoilUpper" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 0.16, 0)
+rotation_degrees = Vector3(0, 24, 0)
+mesh = SubResource("Mesh_coil")
+
+[node name="LooseWire" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.21, 0.04, 0.09)
+rotation_degrees = Vector3(74, 0, 12)
+mesh = SubResource("Mesh_coil")
+
+[node name="Offcut" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.16, 0.03, -0.1)
+rotation_degrees = Vector3(0, 24, 90)
+mesh = SubResource("Mesh_offcut")
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_verb = "Collect"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+position = Vector3(0, 0.2, 0)
+shape = SubResource("Shape_interact")

@@ -1,0 +1,79 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://resources/resource_pickup.gd" id="1_pickup"]
+[ext_resource type="Script" path="res://interactables/interactable.gd" id="2_interactable"]
+[ext_resource type="Resource" path="res://resources/items/scrap_metal.tres" id="3_item"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_scrap"]
+albedo_color = Color(0.64, 0.58, 0.52, 1)
+metallic = 0.65
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_rust"]
+albedo_color = Color(0.6, 0.31, 0.16, 1)
+metallic = 0.35
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+material = SubResource("Mat_scrap")
+size = Vector3(0.34, 0.05, 0.26)
+
+[sub_resource type="BoxMesh" id="Mesh_chunk"]
+material = SubResource("Mat_scrap")
+size = Vector3(0.16, 0.14, 0.2)
+
+[sub_resource type="BoxMesh" id="Mesh_bar"]
+material = SubResource("Mat_rust")
+size = Vector3(0.06, 0.06, 0.4)
+
+[sub_resource type="CylinderMesh" id="Mesh_bolt"]
+material = SubResource("Mat_rust")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.12
+radial_segments = 6
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 0.7
+
+[node name="ScrapPile" type="Node3D"]
+script = ExtResource("1_pickup")
+item = ExtResource("3_item")
+amount = 3
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="PlateLower" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 0.03, 0)
+rotation_degrees = Vector3(0, 18, 0)
+mesh = SubResource("Mesh_plate")
+
+[node name="PlateUpper" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.05, 0.09, -0.04)
+rotation_degrees = Vector3(0, -34, 9)
+mesh = SubResource("Mesh_plate")
+
+[node name="Chunk" type="MeshInstance3D" parent="Model"]
+position = Vector3(-0.11, 0.15, 0.07)
+rotation_degrees = Vector3(6, 42, 0)
+mesh = SubResource("Mesh_chunk")
+
+[node name="Bar" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.03, 0.2, 0.01)
+rotation_degrees = Vector3(0, 62, 22)
+mesh = SubResource("Mesh_bar")
+
+[node name="Bolt" type="MeshInstance3D" parent="Model"]
+position = Vector3(0.14, 0.05, 0.13)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("Mesh_bolt")
+
+[node name="Interactable" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_verb = "Collect"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable"]
+position = Vector3(0, 0.2, 0)
+shape = SubResource("Shape_interact")

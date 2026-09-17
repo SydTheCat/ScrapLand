@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://crafting/recipe.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://resources/items/portable_battery.tres" id="2_result"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = "portable_battery"
+result_item = ExtResource("2_result")
+result_amount = 1
+costs = {
+"copper": 2,
+"energy_cell": 1
+}
+requires_workbench = false
+unlocked_from_start = true
+note = "Restores 25 energy. Use it from the cargo hold when things look grim."

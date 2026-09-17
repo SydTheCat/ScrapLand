@@ -1,0 +1,179 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://interactables/furnace_ui.gd" id="1_ui"]
+[ext_resource type="PackedScene" path="res://inventory/inventory_slot_ui.tscn" id="2_slot"]
+
+[sub_resource type="StyleBoxFlat" id="Style_frame"]
+bg_color = Color(0.07, 0.08, 0.1, 0.55)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.32, 0.2, 0.8)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="FurnaceUI" type="CanvasLayer" groups=["furnace_ui"]]
+layer = 2
+script = ExtResource("1_ui")
+slot_scene = ExtResource("2_slot")
+
+[node name="Root" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Dim" type="ColorRect" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.04, 0.02, 0.02, 0.22)
+
+[node name="Frame" type="PanelContainer" parent="Root"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -280.0
+offset_right = 560.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_frame")
+
+[node name="Margin" type="MarginContainer" parent="Root/Frame"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="Root/Frame/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Root/Frame/Margin/VBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.7, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "FURNACE"
+
+[node name="Hint" type="Label" parent="Root/Frame/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "2 scrap → 1 metal plate"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Body" type="HBoxContainer" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="InputSide" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="InTitle" type="Label" parent="Root/Frame/Margin/VBox/Body/InputSide"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "FEED"
+
+[node name="InputGrid" type="GridContainer" parent="Root/Frame/Margin/VBox/Body/InputSide"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Middle" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Status" type="Label" parent="Root/Frame/Margin/VBox/Body/Middle"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.55, 1)
+theme_override_font_sizes/font_size = 14
+text = "Feed it scrap."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Track" type="ColorRect" parent="Root/Frame/Margin/VBox/Body/Middle"]
+custom_minimum_size = Vector2(180, 16)
+layout_mode = 2
+color = Color(0.08, 0.07, 0.07, 0.9)
+
+[node name="Fill" type="ColorRect" parent="Root/Frame/Margin/VBox/Body/Middle/Track"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 178.0
+offset_bottom = 14.0
+color = Color(1, 0.45, 0.18, 1)
+
+[node name="FeedAll" type="Button" parent="Root/Frame/Margin/VBox/Body/Middle"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_mode = 0
+text = "FEED SCRAP"
+
+[node name="TakeAll" type="Button" parent="Root/Frame/Margin/VBox/Body/Middle"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_mode = 0
+text = "TAKE PLATES"
+
+[node name="OutputSide" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="OutTitle" type="Label" parent="Root/Frame/Margin/VBox/Body/OutputSide"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "OUTPUT"
+
+[node name="OutputGrid" type="GridContainer" parent="Root/Frame/Margin/VBox/Body/OutputSide"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="PlayerSide" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PlayerTitle" type="Label" parent="Root/Frame/Margin/VBox/Body/PlayerSide"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "CARGO HOLD"
+
+[node name="PlayerGrid" type="GridContainer" parent="Root/Frame/Margin/VBox/Body/PlayerSide"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="Footer" type="Label" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.6, 0.66, 1)
+theme_override_font_sizes/font_size = 13
+text = "ESC or TAB — close"
+horizontal_alignment = 2

@@ -1,0 +1,238 @@
+[gd_scene format=3 uid="uid://bhqr3ugbn4ubg"]
+
+[ext_resource type="Script" uid="uid://cxmeclym7it" path="res://interactables/charging_station.gd" id="1_station"]
+[ext_resource type="Script" uid="uid://e44fo537dm7c" path="res://interactables/interactable.gd" id="2_interactable"]
+[ext_resource type="Script" uid="uid://c6q1d8infyf88" path="res://audio/tone_player.gd" id="3_tone"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_concrete"]
+albedo_color = Color(0.55, 0.54, 0.5, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="Mesh_pad"]
+material = SubResource("Mat_concrete")
+top_radius = 1.6
+bottom_radius = 1.7
+height = 0.12
+radial_segments = 24
+
+[sub_resource type="StandardMaterial3D" id="Mat_ring"]
+albedo_color = Color(0.3, 0.09, 0.07, 1)
+emission_enabled = true
+emission = Color(0.3, 0.09, 0.07, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="TorusMesh" id="Mesh_ring"]
+material = SubResource("Mat_ring")
+inner_radius = 1.3
+outer_radius = 1.46
+rings = 24
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.55, 0.57, 0.6, 1)
+metallic = 0.8
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_base_plate"]
+material = SubResource("Mat_metal")
+size = Vector3(1.1, 0.15, 0.75)
+
+[sub_resource type="StandardMaterial3D" id="Mat_housing"]
+albedo_color = Color(0.9, 0.74, 0.2, 1)
+metallic = 0.25
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="Mesh_pillar"]
+material = SubResource("Mat_housing")
+size = Vector3(0.9, 2, 0.55)
+
+[sub_resource type="CylinderMesh" id="Mesh_bolt"]
+material = SubResource("Mat_metal")
+top_radius = 0.06
+bottom_radius = 0.06
+height = 0.06
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="Mat_dark"]
+albedo_color = Color(0.14, 0.15, 0.18, 1)
+metallic = 0.4
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="Mesh_vent"]
+material = SubResource("Mat_dark")
+size = Vector3(0.5, 0.25, 0.05)
+
+[sub_resource type="StandardMaterial3D" id="Mat_screen"]
+albedo_color = Color(0.9, 0.15, 0.1, 1)
+emission_enabled = true
+emission = Color(0.9, 0.15, 0.1, 1)
+emission_energy_multiplier = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_screen"]
+material = SubResource("Mat_screen")
+size = Vector3(0.55, 0.4, 0.06)
+
+[sub_resource type="BoxMesh" id="Mesh_arm"]
+material = SubResource("Mat_metal")
+size = Vector3(0.16, 0.16, 1.1)
+
+[sub_resource type="CylinderMesh" id="Mesh_nozzle"]
+material = SubResource("Mat_dark")
+top_radius = 0.12
+bottom_radius = 0.08
+height = 0.3
+
+[sub_resource type="BoxMesh" id="Mesh_lamp_housing"]
+material = SubResource("Mat_dark")
+size = Vector3(0.34, 0.12, 0.34)
+
+[sub_resource type="CylinderMesh" id="Mesh_pipe"]
+material = SubResource("Mat_metal")
+top_radius = 0.09
+bottom_radius = 0.09
+height = 1.0
+
+[sub_resource type="BoxShape3D" id="Shape_pillar"]
+size = Vector3(0.9, 2, 0.55)
+
+[sub_resource type="CylinderShape3D" id="Shape_charge_zone"]
+height = 2.6
+radius = 1.7
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 1.9
+
+[sub_resource type="ParticleProcessMaterial" id="Spark_process"]
+direction = Vector3(0, -0.4, -1)
+spread = 55.0
+initial_velocity_min = 1.5
+initial_velocity_max = 3.5
+damping_min = 1.0
+damping_max = 3.0
+scale_min = 0.5
+scale_max = 1.3
+color = Color(1, 0.8, 0.35, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_spark"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.92, 0.7, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="Mesh_spark"]
+material = SubResource("Mat_spark")
+size = Vector2(0.04, 0.04)
+
+[node name="ChargingStation" type="StaticBody3D" unique_id=2044560825]
+script = ExtResource("1_station")
+
+[node name="Model" type="Node3D" parent="." unique_id=1432722182]
+
+[node name="Pad" type="MeshInstance3D" parent="Model" unique_id=1291708019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+mesh = SubResource("Mesh_pad")
+
+[node name="PadRing" type="MeshInstance3D" parent="Model" unique_id=1193197807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+mesh = SubResource("Mesh_ring")
+
+[node name="BasePlate" type="MeshInstance3D" parent="Model" unique_id=1927224507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 1.25)
+mesh = SubResource("Mesh_base_plate")
+
+[node name="Pillar" type="MeshInstance3D" parent="Model" unique_id=170431444]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.25)
+mesh = SubResource("Mesh_pillar")
+
+[node name="BoltTopLeft" type="MeshInstance3D" parent="Model/Pillar" unique_id=1442774112]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.35, 0.78, -0.28)
+mesh = SubResource("Mesh_bolt")
+
+[node name="BoltTopRight" type="MeshInstance3D" parent="Model/Pillar" unique_id=735291549]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.35, 0.78, -0.28)
+mesh = SubResource("Mesh_bolt")
+
+[node name="BoltLowLeft" type="MeshInstance3D" parent="Model/Pillar" unique_id=548161706]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.35, -0.82, -0.28)
+mesh = SubResource("Mesh_bolt")
+
+[node name="BoltLowRight" type="MeshInstance3D" parent="Model/Pillar" unique_id=542614881]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.35, -0.82, -0.28)
+mesh = SubResource("Mesh_bolt")
+
+[node name="Vent" type="MeshInstance3D" parent="Model/Pillar" unique_id=1878489119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, -0.29)
+mesh = SubResource("Mesh_vent")
+
+[node name="Screen" type="MeshInstance3D" parent="Model" unique_id=674633324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0.94)
+mesh = SubResource("Mesh_screen")
+
+[node name="Arm" type="MeshInstance3D" parent="Model" unique_id=132368223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0.55)
+mesh = SubResource("Mesh_arm")
+
+[node name="Nozzle" type="MeshInstance3D" parent="Model" unique_id=912886724]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0.05)
+mesh = SubResource("Mesh_nozzle")
+
+[node name="LampHousing" type="MeshInstance3D" parent="Model" unique_id=1376098444]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.06, 1.25)
+mesh = SubResource("Mesh_lamp_housing")
+
+[node name="Lamp" type="OmniLight3D" parent="Model" unique_id=556543843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0.95)
+visible = false
+light_color = Color(0.55, 0.95, 1, 1)
+light_energy = 4.0
+omni_range = 9.0
+
+[node name="PipeLeft" type="MeshInstance3D" parent="Model" unique_id=1964675847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.5, 1.45)
+mesh = SubResource("Mesh_pipe")
+
+[node name="PipeRight" type="MeshInstance3D" parent="Model" unique_id=483374660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.5, 1.45)
+mesh = SubResource("Mesh_pipe")
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1141260964]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.25)
+shape = SubResource("Shape_pillar")
+
+[node name="ChargeZone" type="Area3D" parent="." unique_id=1796300565]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Shape" type="CollisionShape3D" parent="ChargeZone" unique_id=1882101211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+shape = SubResource("Shape_charge_zone")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=1650707584]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_verb = "Repair"
+prompt_label = "Charging Station"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable" unique_id=407621317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.5)
+shape = SubResource("Shape_interact")
+
+[node name="Sparks" type="GPUParticles3D" parent="." unique_id=1458954275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.9)
+emitting = false
+amount = 20
+lifetime = 0.7
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("Spark_process")
+draw_pass_1 = SubResource("Mesh_spark")
+
+[node name="Jingle" type="AudioStreamPlayer" parent="." unique_id=1176711634]
+volume_db = -8.0
+script = ExtResource("3_tone")

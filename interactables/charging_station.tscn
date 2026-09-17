@@ -1,0 +1,151 @@
+[gd_scene format=3 uid="uid://cv4a5cdtijmq"]
+
+[ext_resource type="Script" uid="uid://cxmeclym7it" path="res://interactables/charging_station.gd" id="1_station"]
+[ext_resource type="Script" uid="uid://e44fo537dm7c" path="res://interactables/interactable.gd" id="2_interactable"]
+[ext_resource type="AudioStream" uid="uid://ddemlq74ey8yk" path="res://audio/Pulsing_glowing_sound.mp3" id="3_pulse"]
+[ext_resource type="PackedScene" uid="uid://dmdjtaiyb50uo" path="res://interactables/RegenerationMachine/Regeneration_Station_0915235726_texture.glb" id="4_regen"]
+
+[sub_resource type="BoxShape3D" id="Shape_pillar_left"]
+size = Vector3(0.7697266, 2.5, 0.62575686)
+
+[sub_resource type="BoxShape3D" id="Shape_pillar_right"]
+size = Vector3(0.93842775, 2.5, 0.67509764)
+
+[sub_resource type="BoxShape3D" id="Shape_arch"]
+size = Vector3(4, 0.7, 1.3)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_oex5l"]
+height = 0.18380737
+radius = 1.5283203
+
+[sub_resource type="CylinderShape3D" id="Shape_charge_zone"]
+height = 2.6
+radius = 1.4
+
+[sub_resource type="SphereShape3D" id="Shape_interact"]
+radius = 1.9
+
+[sub_resource type="ParticleProcessMaterial" id="Spark_process"]
+direction = Vector3(0, -0.4, -1)
+spread = 55.0
+initial_velocity_min = 1.5
+initial_velocity_max = 3.5
+damping_min = 1.0
+damping_max = 3.0
+scale_min = 0.5
+scale_max = 1.3
+color = Color(1, 0.8, 0.35, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_spark"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.92, 0.7, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="Mesh_spark"]
+material = SubResource("Mat_spark")
+size = Vector2(0.04, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="Mat_service_field"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+cull_mode = 2
+albedo_color = Color(0.35, 0.95, 1, 0)
+
+[sub_resource type="CylinderMesh" id="Mesh_service_field"]
+top_radius = 1.15
+bottom_radius = 1.15
+height = 2.4
+radial_segments = 24
+rings = 1
+cap_bottom = false
+
+[node name="ChargingStation" type="StaticBody3D" unique_id=1327344048]
+script = ExtResource("1_station")
+
+[node name="Model" type="Node3D" parent="." unique_id=1622004760]
+
+[node name="Visual" parent="Model" unique_id=604430193 instance=ExtResource("4_regen")]
+
+[node name="Lamp" type="OmniLight3D" parent="Model" unique_id=641161568]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)
+light_color = Color(0.55, 0.95, 1, 1)
+light_energy = 4.0
+omni_range = 9.0
+
+[node name="ServiceGlow" type="OmniLight3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+light_color = Color(0.4, 0.95, 1, 1)
+light_energy = 0.0
+omni_range = 6.5
+omni_attenuation = 1.2
+
+[node name="ServiceField" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, 0)
+visible = false
+cast_shadow = 0
+mesh = SubResource("Mesh_service_field")
+surface_material_override/0 = SubResource("Mat_service_field")
+
+[node name="CollisionLeft" type="CollisionShape3D" parent="." unique_id=163585539]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5838844, 1.25, -0.21195069)
+shape = SubResource("Shape_pillar_left")
+
+[node name="CollisionRight" type="CollisionShape3D" parent="." unique_id=1244680146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4998075, 1.25, -0.23168945)
+shape = SubResource("Shape_pillar_right")
+
+[node name="CollisionArch" type="CollisionShape3D" parent="." unique_id=1019497003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.65, -0.15)
+shape = SubResource("Shape_arch")
+
+[node name="CollisionBase" type="CollisionShape3D" parent="." unique_id=1606600915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25369966, 0.019622803, 0)
+shape = SubResource("CylinderShape3D_oex5l")
+
+[node name="CollisionBase2" type="CollisionShape3D" parent="." unique_id=93831997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25369966, 0.23626369, 0)
+shape = SubResource("CylinderShape3D_oex5l")
+
+[node name="ChargeZone" type="Area3D" parent="." unique_id=1095743946]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Shape" type="CollisionShape3D" parent="ChargeZone" unique_id=1350349608]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+shape = SubResource("Shape_charge_zone")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=238104217]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_interactable")
+prompt_verb = "Repair"
+prompt_label = "Regeneration Station"
+
+[node name="Shape" type="CollisionShape3D" parent="Interactable" unique_id=1857011306]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("Shape_interact")
+
+[node name="Sparks" type="GPUParticles3D" parent="." unique_id=493058671]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+emitting = false
+amount = 20
+lifetime = 0.7
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("Spark_process")
+draw_pass_1 = SubResource("Mesh_spark")
+
+[node name="Sfx" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+stream = ExtResource("3_pulse")
+volume_db = -8.0
+max_distance = 18.0
+unit_size = 8.0

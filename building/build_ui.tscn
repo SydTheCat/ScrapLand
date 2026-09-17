@@ -1,0 +1,107 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://building/build_ui.gd" id="1_build_ui"]
+
+[sub_resource type="StyleBoxFlat" id="Style_frame"]
+bg_color = Color(0.05, 0.06, 0.08, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.42, 0.47, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="BuildUI" type="CanvasLayer" groups=["build_ui"]]
+layer = 2
+script = ExtResource("1_build_ui")
+
+[node name="Root" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Frame" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -270.0
+offset_top = -240.0
+offset_right = 270.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_frame")
+
+[node name="Margin" type="MarginContainer" parent="Root/Frame"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="Root/Frame/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Title" type="Label" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+text = "BUILD MODE"
+horizontal_alignment = 1
+
+[node name="Structure" type="Label" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 21
+text = "Storage Box   x1"
+horizontal_alignment = 1
+
+[node name="Status" type="Label" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.55, 1, 0.65, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 15
+text = "Clear. Ready to place."
+horizontal_alignment = 1
+
+[node name="Choices" type="Label" parent="Root/Frame/Margin/VBox"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.72, 0.78, 0.84, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+text = "1 Storage Box"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.58, 0.62, 0.68, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+text = "LMB place    Scroll or Q / R rotate    1–9 / 0 switch"
+horizontal_alignment = 1

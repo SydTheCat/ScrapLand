@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://crafting/recipe.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://resources/items/basic_workbench.tres" id="2_result"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = "basic_workbench"
+result_item = ExtResource("2_result")
+result_amount = 1
+costs = {
+"copper": 4,
+"scrap_metal": 10
+}
+requires_workbench = false
+unlocked_from_start = false
+note = "Unlocked by repairing the charging station. Unlocks further recipes once placed."

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = "hull_plating"
+display_name = "Hull Plating"
+description = "Extra skin for the chassis. Raises how much beating the robot can take before it looks embarrassed."
+color = Color(0.62, 0.66, 0.72, 1)
+max_stack = 1
+upgrade_slot = "chassis"
+extra_max_hull = 25.0
+upgrade_max_integrity = 50.0

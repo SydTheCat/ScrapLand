@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="PackedScene" path="res://interactables/storage_box.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_item")
+id = "storage_box"
+display_name = "Storage Box"
+description = "A box. For putting things in. Revolutionary."
+category = 2
+color = Color(0.76, 0.6, 0.35, 1)
+max_stack = 10
+place_scene = ExtResource("2_scene")
+build_size = Vector3(0.96, 0.72, 0.78)

@@ -1,0 +1,11 @@
+# Godot 4+ editor cache. Keep *.import files; those belong in the repo.
+.godot/
+/android/
+
+# OS / editor junk
+Thumbs.db
+desktop.ini
+.DS_Store
+*~
+*.tmp
+*.swp

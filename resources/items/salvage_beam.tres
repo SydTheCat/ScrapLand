@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = "salvage_beam"
+display_name = "Salvage Beam"
+description = "Built into the arm. Grinds wreckage and packs up anything you placed. Drag this onto the hotbar to use it."
+category = 1
+color = Color(0.45, 0.85, 1, 1)
+max_stack = 1

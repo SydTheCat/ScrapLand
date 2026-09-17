@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://crafting/recipe.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://resources/items/hull_plating.tres" id="2_result"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = "hull_plating"
+result_item = ExtResource("2_result")
+result_amount = 1
+costs = {
+"scrap_metal": 12,
+"metal_plate": 2
+}
+requires_workbench = true
+unlocked_from_start = false
+note = "Install it at the regeneration station (press E)."

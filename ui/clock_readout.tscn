@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/clock_readout.gd" id="1_clock"]
+
+[node name="ClockReadout" type="Control"]
+custom_minimum_size = Vector2(224, 64)
+mouse_filter = 2
+script = ExtResource("1_clock")
+
+[node name="Time" type="Label" parent="."]
+layout_mode = 0
+offset_right = 224.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.72, 0.92, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 34
+text = "07:12"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Date" type="Label" parent="."]
+layout_mode = 0
+offset_top = 36.0
+offset_right = 224.0
+offset_bottom = 58.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.68, 0.74, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+text = "DAY 1  ·  MORNING"
+horizontal_alignment = 2
+vertical_alignment = 1

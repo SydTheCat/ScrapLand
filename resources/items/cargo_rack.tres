@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = "cargo_rack"
+display_name = "Cargo Rack"
+description = "Bolts to the back. Four extra cargo slots for things you will later regret picking up."
+color = Color(0.55, 0.72, 0.55, 1)
+max_stack = 1
+upgrade_slot = "back"
+extra_inventory_slots = 4
+upgrade_max_integrity = 40.0

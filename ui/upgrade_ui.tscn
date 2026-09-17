@@ -1,0 +1,146 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://ui/upgrade_ui.gd" id="1_ui"]
+
+[sub_resource type="StyleBoxFlat" id="Style_frame"]
+bg_color = Color(0.07, 0.09, 0.11, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.32, 0.7, 0.72, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="UpgradeUI" type="CanvasLayer" groups=["upgrade_ui"]]
+layer = 2
+script = ExtResource("1_ui")
+
+[node name="Root" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.03, 0.04, 0.6)
+
+[node name="Frame" type="PanelContainer" parent="Root"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_frame")
+
+[node name="Margin" type="MarginContainer" parent="Root/Frame"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="VBox" type="VBoxContainer" parent="Root/Frame/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Root/Frame/Margin/VBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 24
+text = "REGENERATION BAY"
+
+[node name="Hint" type="Label" parent="Root/Frame/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.7, 0.74, 1)
+theme_override_font_sizes/font_size = 14
+text = "E TO CLOSE"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Rule" type="HSeparator" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+
+[node name="Body" type="HBoxContainer" parent="Root/Frame/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Slots" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+
+[node name="ListTitle" type="Label" parent="Root/Frame/Margin/VBox/Body/Slots"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.78, 0.8, 1)
+theme_override_font_sizes/font_size = 13
+text = "SLOTS"
+
+[node name="Scroll" type="ScrollContainer" parent="Root/Frame/Margin/VBox/Body/Slots"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body/Slots/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Details" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="DetailName" type="Label" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.92, 1)
+theme_override_font_sizes/font_size = 21
+text = "Select a slot"
+autowrap_mode = 3
+
+[node name="DetailDescription" type="Label" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.76, 0.8, 1)
+theme_override_font_sizes/font_size = 15
+text = "Standing on the pad restores hull and installed parts."
+autowrap_mode = 3
+
+[node name="Integrity" type="Label" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.95, 0.75, 1)
+theme_override_font_sizes/font_size = 15
+text = ""
+
+[node name="PartsList" type="VBoxContainer" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ActionButton" type="Button" parent="Root/Frame/Margin/VBox/Body/Details"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Install"
+
+[node name="StatusLabel" type="Label" parent="Root/Frame/Margin/VBox/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.74, 0.78, 1)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3

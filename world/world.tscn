@@ -1,0 +1,393 @@
+[gd_scene format=3 uid="uid://cni0snaj75euj"]
+
+[ext_resource type="PackedScene" uid="uid://t767blqdegkd" path="res://player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="2_hud"]
+[ext_resource type="PackedScene" uid="uid://cv4a5cdtijmq" path="res://interactables/charging_station.tscn" id="3_charger"]
+[ext_resource type="PackedScene" path="res://resources/scrap.tscn" id="4_scrap"]
+[ext_resource type="PackedScene" path="res://resources/copper.tscn" id="5_copper"]
+[ext_resource type="PackedScene" path="res://resources/energy_cell.tscn" id="6_cell"]
+[ext_resource type="PackedScene" path="res://inventory/inventory_ui.tscn" id="7_inventory_ui"]
+[ext_resource type="PackedScene" path="res://interactables/salvage_object.tscn" id="8_salvage"]
+[ext_resource type="PackedScene" path="res://interactables/workbench.tscn" id="9_workbench"]
+[ext_resource type="PackedScene" path="res://crafting/crafting_ui.tscn" id="10_crafting_ui"]
+[ext_resource type="PackedScene" path="res://interactables/ore_deposit.tscn" id="11_ore"]
+[ext_resource type="PackedScene" path="res://building/build_ui.tscn" id="12_build_ui"]
+[ext_resource type="PackedScene" path="res://inventory/container_ui.tscn" id="13_container_ui"]
+[ext_resource type="PackedScene" path="res://interactables/furnace_ui.tscn" id="14_furnace_ui"]
+[ext_resource type="Script" uid="uid://dd0y75l1ds7sf" path="res://world/day_night.gd" id="15_daynight"]
+[ext_resource type="PackedScene" path="res://ui/upgrade_ui.tscn" id="16_upgrade_ui"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
+sky_top_color = Color(0.26, 0.45, 0.68, 1)
+sky_horizon_color = Color(0.83, 0.72, 0.55, 1)
+sky_curve = 0.12
+ground_bottom_color = Color(0.24, 0.2, 0.17, 1)
+ground_horizon_color = Color(0.75, 0.65, 0.5, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("Sky_material")
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+glow_intensity = 0.7
+glow_bloom = 0.15
+fog_enabled = true
+fog_light_color = Color(0.76, 0.71, 0.62, 1)
+fog_density = 0.006
+
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.42, 0.43, 0.37, 1)
+roughness = 0.95
+
+[sub_resource type="PlaneMesh" id="Mesh_ground"]
+material = SubResource("Mat_ground")
+size = Vector2(120, 120)
+
+[sub_resource type="BoxShape3D" id="Shape_ground"]
+size = Vector3(120, 1, 120)
+
+[sub_resource type="StandardMaterial3D" id="Mat_concrete"]
+albedo_color = Color(0.62, 0.61, 0.56, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_step"]
+material = SubResource("Mat_concrete")
+size = Vector3(2, 0.5, 2)
+
+[sub_resource type="BoxShape3D" id="Shape_step"]
+size = Vector3(2, 0.5, 2)
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.55, 0.57, 0.6, 1)
+metallic = 0.75
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_ramp"]
+material = SubResource("Mat_metal")
+size = Vector3(3, 0.4, 6)
+
+[sub_resource type="BoxShape3D" id="Shape_ramp"]
+size = Vector3(3, 0.4, 6)
+
+[sub_resource type="BoxMesh" id="Mesh_plinth"]
+material = SubResource("Mat_concrete")
+size = Vector3(3.4, 1.6, 3.4)
+
+[sub_resource type="BoxShape3D" id="Shape_plinth"]
+size = Vector3(3.4, 1.6, 3.4)
+
+[sub_resource type="BoxMesh" id="Mesh_platform"]
+material = SubResource("Mat_metal")
+size = Vector3(4, 0.5, 4)
+
+[sub_resource type="BoxShape3D" id="Shape_platform"]
+size = Vector3(4, 0.5, 4)
+
+[sub_resource type="StandardMaterial3D" id="Mat_rust"]
+albedo_color = Color(0.65, 0.35, 0.2, 1)
+metallic = 0.3
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="Mesh_crate"]
+material = SubResource("Mat_rust")
+size = Vector3(0.9, 0.9, 0.9)
+
+[sub_resource type="BoxShape3D" id="Shape_crate"]
+size = Vector3(0.9, 0.9, 0.9)
+
+[sub_resource type="BoxMesh" id="Mesh_wall"]
+material = SubResource("Mat_concrete")
+size = Vector3(8, 2, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_wall"]
+size = Vector3(8, 2, 0.5)
+
+[sub_resource type="CylinderMesh" id="Mesh_pipe"]
+material = SubResource("Mat_metal")
+top_radius = 0.35
+bottom_radius = 0.35
+height = 8.0
+
+[sub_resource type="CylinderShape3D" id="Shape_pipe"]
+height = 8.0
+radius = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_glow_beacon"]
+albedo_color = Color(0.4, 1, 0.9, 1)
+emission_enabled = true
+emission = Color(0.25, 0.95, 0.85, 1)
+emission_energy_multiplier = 3.5
+
+[sub_resource type="BoxMesh" id="Mesh_beacon"]
+material = SubResource("Mat_glow_beacon")
+size = Vector3(0.35, 1.4, 0.35)
+
+[node name="World" type="Node3D" unique_id=2055270229]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1285322230]
+environment = SubResource("Environment")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1546208771]
+transform = Transform3D(0.81915206, 0.43938506, -0.36868784, 0, 0.64278764, 0.76604444, 0.57357645, -0.62750685, 0.5265408, 0, 12, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="Moon" type="DirectionalLight3D" parent="." unique_id=355206807]
+transform = Transform3D(-0.81915206, -0.35312894, 0.45198444, 0, 0.7880108, 0.6156615, -0.57357645, 0.5043204, -0.64550066, 0, 12, 0)
+visible = false
+light_color = Color(0.55, 0.68, 0.95, 1)
+light_energy = 0.0
+light_specular = 0.2
+
+[node name="DayNight" type="Node" parent="." unique_id=1714709808]
+script = ExtResource("15_daynight")
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1723571216]
+
+[node name="Mesh" type="MeshInstance3D" parent="Ground" unique_id=778348155]
+mesh = SubResource("Mesh_ground")
+
+[node name="Collision" type="CollisionShape3D" parent="Ground" unique_id=159140628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("Shape_ground")
+
+[node name="TestCourse" type="Node3D" parent="." unique_id=1021331473]
+
+[node name="StepA" type="StaticBody3D" parent="TestCourse" unique_id=1444763457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.25, 2)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/StepA" unique_id=1316680122]
+mesh = SubResource("Mesh_step")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/StepA" unique_id=621489431]
+shape = SubResource("Shape_step")
+
+[node name="StepB" type="StaticBody3D" parent="TestCourse" unique_id=1671743361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.75, 4)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/StepB" unique_id=1768981984]
+mesh = SubResource("Mesh_step")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/StepB" unique_id=486439730]
+shape = SubResource("Shape_step")
+
+[node name="StepC" type="StaticBody3D" parent="TestCourse" unique_id=1204318520]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.25, 6)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/StepC" unique_id=863423102]
+mesh = SubResource("Mesh_step")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/StepC" unique_id=1842543969]
+shape = SubResource("Shape_step")
+
+[node name="Ramp" type="StaticBody3D" parent="TestCourse" unique_id=918742999]
+transform = Transform3D(1, 0, 0, 0, 0.951, -0.309, 0, 0.309, 0.951, -8, 1, -8)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/Ramp" unique_id=1887736974]
+mesh = SubResource("Mesh_ramp")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/Ramp" unique_id=1880194371]
+shape = SubResource("Shape_ramp")
+
+[node name="Plinth" type="StaticBody3D" parent="TestCourse" unique_id=1044518318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.8, -3)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/Plinth" unique_id=494423768]
+mesh = SubResource("Mesh_plinth")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/Plinth" unique_id=252886199]
+shape = SubResource("Shape_plinth")
+
+[node name="Platform" type="StaticBody3D" parent="TestCourse" unique_id=1014081147]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.85, -3)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/Platform" unique_id=715508792]
+mesh = SubResource("Mesh_platform")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/Platform" unique_id=1562243073]
+shape = SubResource("Shape_platform")
+
+[node name="CrateA" type="StaticBody3D" parent="TestCourse" unique_id=478136748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.45, -4)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/CrateA" unique_id=328583383]
+mesh = SubResource("Mesh_crate")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/CrateA" unique_id=518393500]
+shape = SubResource("Shape_crate")
+
+[node name="CrateB" type="StaticBody3D" parent="TestCourse" unique_id=963607390]
+transform = Transform3D(0.966, 0, 0.259, 0, 1, 0, -0.259, 0, 0.966, 3.95, 0.45, -4.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/CrateB" unique_id=673511380]
+mesh = SubResource("Mesh_crate")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/CrateB" unique_id=805152707]
+shape = SubResource("Shape_crate")
+
+[node name="CrateC" type="StaticBody3D" parent="TestCourse" unique_id=1235532228]
+transform = Transform3D(0.996, 0, -0.087, 0, 1, 0, 0.087, 0, 0.996, 3.45, 1.35, -4.05)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/CrateC" unique_id=219150250]
+mesh = SubResource("Mesh_crate")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/CrateC" unique_id=1481391892]
+shape = SubResource("Shape_crate")
+
+[node name="CrateD" type="StaticBody3D" parent="TestCourse" unique_id=1937637015]
+transform = Transform3D(0.906, 0, 0.423, 0, 1, 0, -0.423, 0, 0.906, 1.9, 0.45, -5.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/CrateD" unique_id=463184372]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 1.2779019, 0, 0.5966363)
+mesh = SubResource("Mesh_crate")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/CrateD" unique_id=839774689]
+shape = SubResource("Shape_crate")
+
+[node name="WallA" type="StaticBody3D" parent="TestCourse" unique_id=1328964280]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, -4)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/WallA" unique_id=1665126390]
+mesh = SubResource("Mesh_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/WallA" unique_id=1125069480]
+shape = SubResource("Shape_wall")
+
+[node name="WallB" type="StaticBody3D" parent="TestCourse" unique_id=969683527]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 15, 1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/WallB" unique_id=1617722784]
+mesh = SubResource("Mesh_wall")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/WallB" unique_id=1446685652]
+shape = SubResource("Shape_wall")
+
+[node name="PipeA" type="StaticBody3D" parent="TestCourse" unique_id=1551883717]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -3, 0.35, 5)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/PipeA" unique_id=1934978894]
+mesh = SubResource("Mesh_pipe")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/PipeA" unique_id=1317193929]
+shape = SubResource("Shape_pipe")
+
+[node name="PipeB" type="StaticBody3D" parent="TestCourse" unique_id=17006043]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, -3.3, 1.05, 5.4)
+
+[node name="Mesh" type="MeshInstance3D" parent="TestCourse/PipeB" unique_id=833980357]
+mesh = SubResource("Mesh_pipe")
+
+[node name="Collision" type="CollisionShape3D" parent="TestCourse/PipeB" unique_id=1141102337]
+shape = SubResource("Shape_pipe")
+
+[node name="BeaconNorth" type="MeshInstance3D" parent="TestCourse" unique_id=1438938276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -18)
+mesh = SubResource("Mesh_beacon")
+
+[node name="Light" type="OmniLight3D" parent="TestCourse/BeaconNorth" unique_id=1708625851 groups=["night_lights"]]
+light_color = Color(0.35, 0.95, 0.9, 1)
+light_energy = 2.5
+omni_range = 8.0
+
+[node name="BeaconEast" type="MeshInstance3D" parent="TestCourse" unique_id=1609893629]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0.7, 9)
+mesh = SubResource("Mesh_beacon")
+
+[node name="Light" type="OmniLight3D" parent="TestCourse/BeaconEast" unique_id=1143844345 groups=["night_lights"]]
+light_color = Color(0.35, 0.95, 0.9, 1)
+light_energy = 2.5
+omni_range = 8.0
+
+[node name="BeaconWest" type="MeshInstance3D" parent="TestCourse" unique_id=480672646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.7, 11)
+mesh = SubResource("Mesh_beacon")
+
+[node name="Light" type="OmniLight3D" parent="TestCourse/BeaconWest" unique_id=1081151089 groups=["night_lights"]]
+light_color = Color(0.35, 0.95, 0.9, 1)
+light_energy = 2.5
+omni_range = 8.0
+
+[node name="Salvage" type="Node3D" parent="." unique_id=762280322]
+
+[node name="BrokenGeneratorA" parent="Salvage" unique_id=95167907 instance=ExtResource("8_salvage")]
+transform = Transform3D(0.94, 0, 0.342, 0, 1, 0, -0.342, 0, 0.94, 5.5, 0, -8.5)
+
+[node name="BrokenGeneratorB" parent="Salvage" unique_id=904367537 instance=ExtResource("8_salvage")]
+transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, -4.5, 0, -13)
+
+[node name="BrokenGeneratorC" parent="Salvage" unique_id=50052014 instance=ExtResource("8_salvage")]
+transform = Transform3D(0.174, 0, -0.985, 0, 1, 0, 0.985, 0, 0.174, 9.5, 0, 4)
+
+[node name="Structures" type="Node3D" parent="." unique_id=723072645 groups=["structures"]]
+
+[node name="Ore" type="Node3D" parent="." unique_id=229941817]
+
+[node name="CopperDepositA" parent="Ore" unique_id=2135710277 instance=ExtResource("11_ore")]
+transform = Transform3D(0.906, 0, -0.423, 0, 1, 0, 0.423, 0, 0.906, -9.5, 0, -9)
+
+[node name="CopperDepositB" parent="Ore" unique_id=1636002462 instance=ExtResource("11_ore")]
+transform = Transform3D(0.5, 0, 0.866, 0, 1, 0, -0.866, 0, 0.5, 11.5, 0, 7.5)
+
+[node name="CopperDepositC" parent="Ore" unique_id=871496683 instance=ExtResource("11_ore")]
+transform = Transform3D(-0.766, 0, -0.643, 0, 1, 0, 0.643, 0, -0.766, -11, 0, 6.5)
+
+[node name="Resources" type="Node3D" parent="." unique_id=1209583783]
+
+[node name="ScrapA" parent="Resources" unique_id=1826641223 instance=ExtResource("4_scrap")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0, -6.4)
+
+[node name="ScrapB" parent="Resources" unique_id=1899487802 instance=ExtResource("4_scrap")]
+transform = Transform3D(0.766, 0, 0.643, 0, 1, 0, -0.643, 0, 0.766, 4.6, 0, -2.1)
+
+[node name="ScrapC" parent="Resources" unique_id=1253397375 instance=ExtResource("4_scrap")]
+transform = Transform3D(0.174, 0, 0.985, 0, 1, 0, -0.985, 0, 0.174, -2, 0, 3.9)
+
+[node name="ScrapD" parent="Resources" unique_id=952469664 instance=ExtResource("4_scrap")]
+transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, 7.6, 0, 0.8)
+
+[node name="ScrapE" parent="Resources" unique_id=631825261 instance=ExtResource("4_scrap")]
+transform = Transform3D(0.94, 0, -0.342, 0, 1, 0, 0.342, 0, 0.94, -5.4, 0, -10.2)
+
+[node name="ScrapF" parent="Resources" unique_id=1157660707 instance=ExtResource("4_scrap")]
+transform = Transform3D(0.5, 0, -0.866, 0, 1, 0, 0.866, 0, 0.5, 10.4, 0, -2.6)
+
+[node name="CopperA" parent="Resources" unique_id=655028867 instance=ExtResource("5_copper")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -6.6)
+
+[node name="CopperB" parent="Resources" unique_id=799694261 instance=ExtResource("5_copper")]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, -5.6, 0, -0.8)
+
+[node name="CopperC" parent="Resources" unique_id=295092917 instance=ExtResource("5_copper")]
+transform = Transform3D(0.643, 0, -0.766, 0, 1, 0, 0.766, 0, 0.643, 12.8, 0, -4.6)
+
+[node name="EnergyCellA" parent="Resources" unique_id=664359273 instance=ExtResource("6_cell")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0, -13.5)
+
+[node name="ChargingStation" parent="." unique_id=25816087 instance=ExtResource("3_charger")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -5)
+
+[node name="Workbench" parent="." unique_id=1278914945 instance=ExtResource("9_workbench")]
+transform = Transform3D(-0.009667337, 0, 0.9996382, 0, 0.99999994, 0, -0.9996382, 0, -0.009667337, -4.5845003, 0, -4.2)
+
+[node name="Player" parent="." unique_id=655413203 instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+
+[node name="HUD" parent="." unique_id=1192031406 instance=ExtResource("2_hud")]
+
+[node name="InventoryUI" parent="." unique_id=1139140443 instance=ExtResource("7_inventory_ui")]
+
+[node name="CraftingUI" parent="." unique_id=648613929 instance=ExtResource("10_crafting_ui")]
+
+[node name="BuildUI" parent="." unique_id=270108502 instance=ExtResource("12_build_ui")]
+
+[node name="ContainerUI" parent="." unique_id=2062920979 instance=ExtResource("13_container_ui")]
+
+[node name="FurnaceUI" parent="." unique_id=595001357 instance=ExtResource("14_furnace_ui")]
+
+[node name="UpgradeUI" parent="." unique_id=963758161 instance=ExtResource("16_upgrade_ui")]

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CraftingRecipe" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://crafting/recipe.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://resources/items/furnace.tres" id="2_result"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = "furnace"
+result_item = ExtResource("2_result")
+result_amount = 1
+costs = {
+"copper": 6,
+"scrap_metal": 14
+}
+requires_workbench = true
+unlocked_from_start = true
+note = "Needs a workbench. Turns scrap into metal plates once you feed it."

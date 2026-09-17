@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dmkuwq66h3suy"]
+
+[ext_resource type="Script" uid="uid://dqgjyxslm6ulv" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="PackedScene" path="res://interactables/workbench.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_item")
+id = "basic_workbench"
+display_name = "Basic Workbench"
+description = "A fabrication bench. Stand nearby to unlock workbench recipes, then press E."
+category = 2
+color = Color(0.9, 0.72, 0.3, 1)
+max_stack = 5
+place_scene = ExtResource("2_scene")
+build_size = Vector3(2.475, 1.375, 1.1)
