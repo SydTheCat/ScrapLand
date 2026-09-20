@@ -19,6 +19,7 @@ var _key_caption: String = ""
 
 var _key: Label
 var _swatch: ColorRect
+var _icon: TextureRect
 var _count: Label
 
 
@@ -49,14 +50,20 @@ func display(item_id: String, count: int, selected: bool, available: bool) -> vo
 
 	if empty:
 		_swatch.visible = false
+		_icon.visible = false
 		_count.visible = false
 		tooltip_text = "Drag an item here to take it out of the cargo hold."
 		return
 
-	_swatch.visible = true
+	var has_icon := item.icon != null
+	_swatch.visible = not has_icon
 	_swatch.color = item.color
+	_icon.visible = has_icon
+	_icon.texture = item.icon
+	_icon.modulate = Color.WHITE
 	if not available:
 		_swatch.color = _swatch.color.darkened(0.45)
+		_icon.modulate = Color(0.5, 0.5, 0.5, 1)
 	_count.visible = count > 1
 	_count.text = str(count)
 	tooltip_text = item.display_name
@@ -98,6 +105,18 @@ func _build_children() -> void:
 	_swatch.offset_bottom = -10
 	add_child(_swatch)
 
+	_icon = TextureRect.new()
+	_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_icon.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_icon.offset_left = 8
+	_icon.offset_top = 16
+	_icon.offset_right = -8
+	_icon.offset_bottom = -6
+	_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_icon.visible = false
+	add_child(_icon)
+
 	_key = Label.new()
 	_key.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_key.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -125,11 +144,21 @@ func _build_children() -> void:
 
 
 func _set_preview(item_id: String) -> void:
-	var item := ItemDB.get_item(item_id)
-	var preview := ColorRect.new()
-	preview.custom_minimum_size = Vector2(40, 40)
-	preview.color = item.color if item else Color(0.5, 0.5, 0.5)
-	set_drag_preview(preview)
+	set_drag_preview(_make_item_preview(ItemDB.get_item(item_id), Vector2(40, 40)))
+
+
+func _make_item_preview(item: ItemData, size: Vector2) -> Control:
+	if item and item.icon:
+		var picture := TextureRect.new()
+		picture.custom_minimum_size = size
+		picture.texture = item.icon
+		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		return picture
+	var block := ColorRect.new()
+	block.custom_minimum_size = size
+	block.color = item.color if item else Color(0.5, 0.5, 0.5)
+	return block
 
 
 func _style_for(selected: bool, filled: bool, available: bool) -> StyleBoxFlat:

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://bolq24idym75l" path="res://Assets/Icons/Salvage_Beam.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
@@ -8,5 +9,6 @@ id = "salvage_beam"
 display_name = "Salvage Beam"
 description = "Built into the arm. Grinds wreckage and packs up anything you placed. Drag this onto the hotbar to use it."
 category = 1
+icon = ExtResource("2_icon")
 color = Color(0.45, 0.85, 1, 1)
 max_stack = 1

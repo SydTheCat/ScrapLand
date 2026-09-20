@@ -44,6 +44,9 @@ signal work_stopped
 @export var repair_per_item: float = 22.0
 
 @export_group("Arm Animation")
+## Full-body clip on the robot, e.g. "point" for the salvage beam. Empty: the
+## procedural arm swing below is used instead.
+@export var body_animation: StringName = &""
 ## Positive angles swing the arm forward and down.
 @export var arm_aim_degrees: float = 62.0
 @export var arm_speed: float = 12.0
@@ -62,7 +65,7 @@ signal work_stopped
 
 @export_group("Model")
 ## The mesh on the robot's arm for this tool, shown only while equipped. Path is
-## relative to this node, e.g. "../../RobotModel/ArmRight/ToolAttachment/PickHead".
+## relative to this node, e.g. "../../RobotModel/ArmRight/ToolAttachment/SalvageHead".
 @export var attachment_path: NodePath
 
 # --- Internal ---------------------------------------------------------------
@@ -130,6 +133,7 @@ func _process(delta: float) -> void:
 		_warned_idle = false
 	if not working:
 		_stop()
+	_sync_body_animation(working)
 
 	_animate_arm(delta, working)
 
@@ -148,6 +152,7 @@ func set_equipped(on: bool) -> void:
 	if not on:
 		_repair_credit = 0.0
 		_stop()
+		_sync_body_animation(false)
 		# The lerp in _animate_arm stops with _process, so put the arm back by hand.
 		if _arm:
 			_arm.rotation.x = _arm_rest_x
@@ -335,8 +340,17 @@ func _target_name(target: Node) -> String:
 
 ## Holds the arm forward while working, or chops with it for swinging tools, and
 ## lets it fall back afterwards.
+func _sync_body_animation(working: bool) -> void:
+	if body_animation.is_empty() or _robot == null:
+		return
+	if working:
+		_robot.play_action(body_animation)
+	else:
+		_robot.clear_action()
+
+
 func _animate_arm(delta: float, working: bool) -> void:
-	if _arm == null:
+	if _arm == null or not body_animation.is_empty():
 		return
 
 	var target_angle := _arm_rest_x

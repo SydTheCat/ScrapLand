@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cray5m3u4e2wm" path="res://Assets/Icons/SteelPlates.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
@@ -8,5 +9,6 @@ id = "metal_plate"
 display_name = "Metal Plate"
 description = "Scrap that has been flattened, cleaned, and forgiven. The Furnace's opinion of junk."
 category = 0
+icon = ExtResource("2_icon")
 color = Color(0.78, 0.8, 0.84, 1)
 max_stack = 50

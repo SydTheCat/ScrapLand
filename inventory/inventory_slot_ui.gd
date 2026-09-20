@@ -67,6 +67,7 @@ func _get_drag_data(_at: Vector2) -> Variant:
 	var payload := _make_drag_payload()
 	if payload.is_empty():
 		return null
+	set_drag_preview(_make_item_preview(slot.item, Vector2(48, 48)))
 	return payload
 
 
@@ -83,11 +84,22 @@ func _on_gui_input(event: InputEvent) -> void:
 	var payload := _make_drag_payload()
 	if payload.is_empty():
 		return
-	var preview := ColorRect.new()
-	preview.custom_minimum_size = Vector2(48, 48)
-	preview.color = slot.item.color
-	force_drag(payload, preview)
+	force_drag(payload, _make_item_preview(slot.item, Vector2(48, 48)))
 	_press_at = Vector2.INF
+
+
+func _make_item_preview(item: ItemData, size: Vector2) -> Control:
+	if item and item.icon:
+		var picture := TextureRect.new()
+		picture.custom_minimum_size = size
+		picture.texture = item.icon
+		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		return picture
+	var swatch := ColorRect.new()
+	swatch.custom_minimum_size = size
+	swatch.color = item.color if item else Color(0.5, 0.5, 0.5)
+	return swatch
 
 
 func _make_drag_payload() -> Dictionary:

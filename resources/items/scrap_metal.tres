@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cq0ut1n65ysud" path="res://Assets/Icons/ScrapMetal.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
@@ -8,5 +9,6 @@ id = "scrap_metal"
 display_name = "Scrap Metal"
 description = "Twisted plate, bent brackets, a bolt that has seen things. The backbone of everything you will ever build."
 category = 0
+icon = ExtResource("2_icon")
 color = Color(0.72, 0.62, 0.55, 1)
 max_stack = 50

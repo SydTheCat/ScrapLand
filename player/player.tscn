@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://doali0ynyq1tl" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_01a0a74c-f43e-76db-9425-f8beb81d473b_withSkin.glb" id="24_idle"]
 [ext_resource type="PackedScene" uid="uid://bramptoif7ji4" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_Jump_and_Grab_Wall_withSkin.glb" id="25_jump"]
 [ext_resource type="PackedScene" uid="uid://dca3ca25fjcxa" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_01a0a74f-682e-7580-bf8b-7675f29cf7e2_withSkin.glb" id="26_idle_alt"]
+[ext_resource type="PackedScene" uid="uid://csjq0s0w30lpb" path="res://player/Robot/RustyRobot/Meshy_AI_Rusty_Robo_Buddy_biped_Animation_01a0bc14-7f94-75f4-8cf4-cd0279ada0b8_withSkin.glb" id="30_point"]
 [ext_resource type="Script" path="res://player/upgrades.gd" id="27_upgrades"]
 [ext_resource type="Resource" path="res://crafting/recipes/cargo_rack.tres" id="28_r_rack"]
 [ext_resource type="Resource" path="res://crafting/recipes/hull_plating.tres" id="29_r_plate"]
@@ -60,24 +61,6 @@ top_radius = 0.035
 bottom_radius = 0.055
 height = 0.24
 radial_segments = 8
-
-[sub_resource type="CylinderMesh" id="Mesh_pick_haft"]
-material = SubResource("Mat_dark")
-top_radius = 0.022
-bottom_radius = 0.026
-height = 0.34
-radial_segments = 6
-
-[sub_resource type="CylinderMesh" id="Mesh_pick_spike"]
-material = SubResource("Mat_metal")
-top_radius = 0.006
-bottom_radius = 0.045
-height = 0.2
-radial_segments = 6
-
-[sub_resource type="BoxMesh" id="Mesh_pick_heel"]
-material = SubResource("Mat_metal")
-size = Vector3(0.05, 0.09, 0.07)
 
 [sub_resource type="StandardMaterial3D" id="Mat_weld_tip"]
 albedo_color = Color(0.55, 0.9, 1, 1)
@@ -142,6 +125,7 @@ idle_scene = ExtResource("24_idle")
 run_scene = ExtResource("23_run")
 air_scene = ExtResource("25_jump")
 idle_alt_scene = ExtResource("26_idle_alt")
+point_scene = ExtResource("30_point")
 
 [node name="Visual" parent="RobotModel" instance=ExtResource("22_walk")]
 
@@ -171,21 +155,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.38, 0)
 [node name="SalvageHead" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment" unique_id=1182398779]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.1)
 mesh = SubResource("Mesh_tool")
-
-[node name="PickHead" type="Node3D" parent="RobotModel/ArmRight/ToolAttachment" unique_id=251152614]
-visible = false
-
-[node name="Haft" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/PickHead" unique_id=589152917]
-transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.15)
-mesh = SubResource("Mesh_pick_haft")
-
-[node name="Spike" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/PickHead" unique_id=1304896205]
-transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, -0.08, -0.29)
-mesh = SubResource("Mesh_pick_spike")
-
-[node name="Heel" type="MeshInstance3D" parent="RobotModel/ArmRight/ToolAttachment/PickHead" unique_id=378728544]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.29)
-mesh = SubResource("Mesh_pick_heel")
 
 [node name="WeldHead" type="Node3D" parent="RobotModel/ArmRight/ToolAttachment"]
 visible = false
@@ -272,6 +241,7 @@ script = ExtResource("16_tool")
 display_name = "Salvage Beam"
 item_id = "salvage_beam"
 always_owned = true
+body_animation = &"point"
 attachment_path = NodePath("../../RobotModel/ArmRight/ToolAttachment/SalvageHead")
 
 [node name="ScrapPick" type="Node" parent="Tools" unique_id=83140063]
@@ -280,15 +250,11 @@ display_name = "Scrap Pick"
 item_id = "scrap_pick"
 damage_per_second = 55.0
 energy_per_second = 2.2
-arm_aim_degrees = 48.0
-swing_enabled = true
-swing_degrees = 34.0
-swing_speed = 7.5
+body_animation = &"point"
 buzz_interval = 0.34
 buzz_frequency_min = 85.0
 buzz_frequency_max = 135.0
 buzz_length_scale = 0.5
-attachment_path = NodePath("../../RobotModel/ArmRight/ToolAttachment/PickHead")
 
 [node name="RepairTorch" type="Node" parent="Tools"]
 script = ExtResource("16_tool")

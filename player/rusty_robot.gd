@@ -18,6 +18,8 @@ extends Node3D
 @export var air_scene: PackedScene
 ## Extra unnamed Meshy clip, kept as idle_alt if you want to swap later.
 @export var idle_alt_scene: PackedScene
+## Played while the salvage beam is held on a target.
+@export var point_scene: PackedScene
 
 @export_group("Bone follow")
 @export var head_path: NodePath = ^"Head"
@@ -79,10 +81,12 @@ func _install_animations() -> void:
 	_import_named(lib, run_scene, "run")
 	_import_named(lib, air_scene, "air")
 	_import_named(lib, idle_alt_scene, "idle_alt")
+	_import_named(lib, point_scene, "point")
 	_set_loop(lib, "idle", true)
 	_set_loop(lib, "walk", true)
 	_set_loop(lib, "run", true)
 	_set_loop(lib, "air", false)
+	_set_loop(lib, "point", false)
 
 
 func _writable_library(ap: AnimationPlayer) -> AnimationLibrary:

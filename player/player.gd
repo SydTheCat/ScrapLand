@@ -69,6 +69,8 @@ var actions_enabled: bool = true
 # --- Internal ---------------------------------------------------------------
 
 var _locomotion: StringName = &"idle"
+## Non-empty while a tool owns the body clip (the salvage beam's point).
+var _action: StringName = &""
 var _coyote_timer: float = 0.0
 var _was_on_floor: bool = true
 var _gravity: float = 9.8
@@ -228,11 +230,11 @@ func _update_locomotion() -> void:
 	elif speed > 0.2:
 		state = &"walk"
 
-	if state == _locomotion:
-		return
-	_locomotion = state
-	locomotion_changed.emit(state)
-	_play_animation(state)
+	if state != _locomotion:
+		_locomotion = state
+		locomotion_changed.emit(state)
+		if _action.is_empty():
+			_play_animation(state)
 
 
 ## Plays an animation only if it exists, so this is safe before any animations
@@ -240,6 +242,23 @@ func _update_locomotion() -> void:
 func _play_animation(name: StringName) -> void:
 	if _anim and _anim.has_animation(String(name)):
 		_anim.play(String(name))
+
+
+## Tools call this so walk/idle cannot steal the clip mid-job.
+func play_action(name: StringName) -> void:
+	if name.is_empty():
+		return
+	_action = name
+	if _anim and _anim.current_animation == String(name):
+		return
+	_play_animation(name)
+
+
+func clear_action() -> void:
+	if _action.is_empty():
+		return
+	_action = &""
+	_play_animation(_locomotion)
 
 
 # --- Public API for later systems -------------------------------------------

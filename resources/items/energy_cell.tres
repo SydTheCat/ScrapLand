@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://l4mnqgdfafa7" path="res://Assets/Icons/EnergyCell.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
@@ -8,5 +9,6 @@ id = "energy_cell"
 display_name = "Energy Cell"
 description = "Still holding a charge after all these years. Admirable. Slightly warm, which is either a good sign or a very bad one."
 category = 0
+icon = ExtResource("2_icon")
 color = Color(0.35, 0.95, 1.0, 1)
 max_stack = 10

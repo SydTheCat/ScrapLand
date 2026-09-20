@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://bi2sdxfgygws1" path="res://Assets/Icons/CopperMetal.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
@@ -8,5 +9,6 @@ id = "copper"
 display_name = "Copper"
 description = "Stripped wiring and coil windings. Carries electricity, which is the closest thing you have to a religion."
 category = 0
+icon = ExtResource("2_icon")
 color = Color(0.85, 0.45, 0.2, 1)
 max_stack = 50

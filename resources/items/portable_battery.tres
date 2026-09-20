@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://co70uys1li501" path="res://Assets/Icons/Portable Battery.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
@@ -8,6 +9,7 @@ id = "portable_battery"
 display_name = "Portable Battery"
 description = "A charge you can carry. Tastes faintly of ozone. Do not actually taste it."
 category = 3
+icon = ExtResource("2_icon")
 color = Color(0.4, 0.95, 0.6, 1)
 max_stack = 5
 energy_restored = 25.0

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://resources/resource_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cnjvmver7136a" path="res://Assets/Icons/MiningTool.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
@@ -8,5 +9,6 @@ id = "scrap_pick"
 display_name = "Scrap Pick"
 description = "Heavy, blunt, deeply satisfying. For breaking apart debris too stubborn for the salvage beam."
 category = 1
+icon = ExtResource("2_icon")
 color = Color(0.72, 0.68, 0.6, 1)
 max_stack = 1
