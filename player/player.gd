@@ -6,6 +6,7 @@ class_name Player
 ##   * camera-relative movement with mechanical acceleration / braking
 ##   * turning the robot body toward the direction it is travelling
 ##   * jumping (with a short coyote-time grace window)
+##   * a backpack jetpack that fires short aerial spurts (see jetpack.gd)
 ##   * the head-mounted flashlight
 ##   * emitting signals that other systems will listen to later
 ##
@@ -74,6 +75,7 @@ var _action: StringName = &""
 var _coyote_timer: float = 0.0
 var _was_on_floor: bool = true
 var _gravity: float = 9.8
+var _floor_snap: float = 0.3
 
 ## The visual robot. Only this node rotates -- the CharacterBody3D itself stays
 ## axis-aligned, which keeps the collision capsule and camera math simple.
@@ -82,12 +84,14 @@ var _gravity: float = 9.8
 @onready var flashlight: SpotLight3D = get_node_or_null("RobotModel/Head/Flashlight") as SpotLight3D
 ## Where crafted tools get attached later (salvage tool, mining arm, ...).
 @onready var tool_attachment: Node3D = get_node_or_null("RobotModel/ArmRight/ToolAttachment") as Node3D
+@onready var jetpack: RobotJetpack = get_node_or_null("RobotModel/Jetpack") as RobotJetpack
 ## Optional: nothing breaks while there are no animations yet.
 var _anim: AnimationPlayer
 
 
 func _ready() -> void:
 	_gravity = float(ProjectSettings.get_setting("physics/3d/default_gravity", 9.8))
+	_floor_snap = floor_snap_length
 	if flashlight:
 		flashlight.visible = flashlight_starts_on
 	if model and model.has_method("get_animation_player"):
@@ -133,7 +137,10 @@ func _physics_process(delta: float) -> void:
 
 	var direction := _get_move_direction()
 	_apply_horizontal_movement(direction, delta)
-	_try_jump()
+	var jumped := _try_jump()
+	if jetpack:
+		jetpack.tick(delta, jumped)
+		floor_snap_length = 0.0 if jetpack.is_bursting() else _floor_snap
 
 	move_and_slide()
 
@@ -190,15 +197,16 @@ func _apply_horizontal_movement(direction: Vector3, delta: float) -> void:
 	velocity.z = move_toward(velocity.z, target.z, rate * delta)
 
 
-func _try_jump() -> void:
+func _try_jump() -> bool:
 	if not can_move or _coyote_timer <= 0.0:
-		return
+		return false
 	if not Input.is_action_just_pressed(&"jump"):
-		return
+		return false
 	# v = sqrt(2 * g * h) -- derived from the jump height so tuning stays intuitive.
 	velocity.y = sqrt(2.0 * _gravity * gravity_scale * jump_height)
 	_coyote_timer = 0.0
 	jumped.emit()
+	return true
 
 
 func _report_landing(fall_speed: float) -> void:
@@ -265,6 +273,11 @@ func clear_action() -> void:
 
 func get_horizontal_speed() -> float:
 	return Vector2(velocity.x, velocity.z).length()
+
+
+## Camera-relative walk vector. The jetpack uses this to nudge in air.
+func get_move_direction() -> Vector3:
+	return _get_move_direction()
 
 
 func get_locomotion_state() -> StringName:

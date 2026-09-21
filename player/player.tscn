@@ -30,6 +30,7 @@
 [ext_resource type="Script" path="res://player/upgrades.gd" id="27_upgrades"]
 [ext_resource type="Resource" path="res://crafting/recipes/cargo_rack.tres" id="28_r_rack"]
 [ext_resource type="Resource" path="res://crafting/recipes/hull_plating.tres" id="29_r_plate"]
+[ext_resource type="Script" uid="uid://c8njetpkrocky1" path="res://player/jetpack.gd" id="31_jetpack"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_player"]
 radius = 0.3
@@ -107,6 +108,84 @@ particles_anim_loop = false
 material = SubResource("Mat_spark")
 size = Vector2(0.035, 0.035)
 
+[sub_resource type="StandardMaterial3D" id="Mat_pack"]
+albedo_color = Color(0.22, 0.18, 0.16, 1)
+metallic = 0.55
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="Mat_pack_can"]
+albedo_color = Color(0.38, 0.28, 0.18, 1)
+metallic = 0.7
+roughness = 0.4
+emission_enabled = true
+emission = Color(1, 0.4, 0.12, 1)
+emission_energy_multiplier = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_pack_nozzle"]
+albedo_color = Color(0.18, 0.19, 0.22, 1)
+metallic = 0.85
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_pack_tank"]
+material = SubResource("Mat_pack")
+size = Vector3(0.18, 0.24, 0.11)
+
+[sub_resource type="CylinderMesh" id="Mesh_pack_can"]
+material = SubResource("Mat_pack_can")
+top_radius = 0.038
+bottom_radius = 0.042
+height = 0.22
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="Mesh_pack_nozzle"]
+material = SubResource("Mat_pack_nozzle")
+top_radius = 0.016
+bottom_radius = 0.026
+height = 0.07
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="Mesh_pack_strap"]
+material = SubResource("Mat_pack")
+size = Vector3(0.04, 0.035, 0.16)
+
+[sub_resource type="Gradient" id="Exhaust_grad"]
+offsets = PackedFloat32Array(0, 0.22, 0.62, 1)
+colors = PackedColorArray(1, 0.95, 0.65, 1, 1, 0.55, 0.12, 0.85, 0.85, 0.18, 0.04, 0.35, 0.15, 0.05, 0.02, 0)
+
+[sub_resource type="GradientTexture1D" id="Exhaust_ramp"]
+gradient = SubResource("Exhaust_grad")
+
+[sub_resource type="ParticleProcessMaterial" id="Exhaust_process"]
+emission_shape = 1
+emission_sphere_radius = 0.018
+direction = Vector3(0, -1, 0)
+spread = 14.0
+initial_velocity_min = 3.4
+initial_velocity_max = 6.8
+gravity = Vector3(0, -6, 0)
+damping_min = 0.4
+damping_max = 1.2
+scale_min = 0.45
+scale_max = 1.15
+color = Color(1, 0.7, 0.25, 1)
+color_ramp = SubResource("Exhaust_ramp")
+
+[sub_resource type="StandardMaterial3D" id="Mat_exhaust"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.75, 0.3, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="Mesh_exhaust"]
+material = SubResource("Mat_exhaust")
+size = Vector2(0.1, 0.1)
+
 [sub_resource type="SphereShape3D" id="Shape_interactor"]
 radius = 3.2
 
@@ -176,6 +255,66 @@ one_shot = true
 explosiveness = 0.95
 process_material = SubResource("Spark_process")
 draw_pass_1 = SubResource("Mesh_spark")
+
+[node name="Jetpack" type="Node3D" parent="RobotModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.34)
+script = ExtResource("31_jetpack")
+
+[node name="Tank" type="MeshInstance3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+mesh = SubResource("Mesh_pack_tank")
+
+[node name="CanisterL" type="MeshInstance3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.01, 0.02)
+mesh = SubResource("Mesh_pack_can")
+
+[node name="CanisterR" type="MeshInstance3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.01, 0.02)
+mesh = SubResource("Mesh_pack_can")
+
+[node name="StrapL" type="MeshInstance3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0.08, -0.08)
+mesh = SubResource("Mesh_pack_strap")
+
+[node name="StrapR" type="MeshInstance3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.08, -0.08)
+mesh = SubResource("Mesh_pack_strap")
+
+[node name="NozzleL" type="MeshInstance3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, -0.145, 0.02)
+mesh = SubResource("Mesh_pack_nozzle")
+
+[node name="Exhaust" type="GPUParticles3D" parent="RobotModel/Jetpack/NozzleL"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+emitting = false
+amount = 28
+lifetime = 0.32
+randomness = 0.35
+visibility_aabb = AABB(-0.4, -1.2, -0.4, 0.8, 1.5, 0.8)
+process_material = SubResource("Exhaust_process")
+draw_pass_1 = SubResource("Mesh_exhaust")
+
+[node name="NozzleR" type="MeshInstance3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.145, 0.02)
+mesh = SubResource("Mesh_pack_nozzle")
+
+[node name="Exhaust" type="GPUParticles3D" parent="RobotModel/Jetpack/NozzleR"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+emitting = false
+amount = 28
+lifetime = 0.32
+randomness = 0.35
+visibility_aabb = AABB(-0.4, -1.2, -0.4, 0.8, 1.5, 0.8)
+process_material = SubResource("Exhaust_process")
+draw_pass_1 = SubResource("Mesh_exhaust")
+
+[node name="Glow" type="OmniLight3D" parent="RobotModel/Jetpack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.16, 0.02)
+light_color = Color(1, 0.48, 0.12, 1)
+light_energy = 2.6
+omni_range = 1.8
+omni_attenuation = 1.6
+shadow_enabled = false
 
 [node name="UpgradePoints" type="Node3D" parent="RobotModel" unique_id=711245806]
 
