@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://ui/hud.gd" id="1_hud"]
 [ext_resource type="PackedScene" path="res://ui/battery_meter.tscn" id="2_meter"]
@@ -14,6 +14,18 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.4, 0.42, 0.47, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Style_jetpack_track"]
+bg_color = Color(0.05, 0.06, 0.08, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.75, 0.42, 0.16, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -167,6 +179,50 @@ offset_top = 248.0
 offset_right = -24.0
 offset_bottom = 320.0
 grow_horizontal = 0
+
+[node name="JetpackBar" type="Control" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -286.0
+offset_right = 250.0
+offset_bottom = -236.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="JetpackBar"]
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.7, 0.32, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 16
+text = "JETPACK  100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Track" type="Panel" parent="JetpackBar"]
+layout_mode = 0
+offset_top = 26.0
+offset_right = 500.0
+offset_bottom = 48.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_jetpack_track")
+
+[node name="Fill" type="ColorRect" parent="JetpackBar"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 29.0
+offset_right = 497.0
+offset_bottom = 45.0
+mouse_filter = 2
+color = Color(1, 0.55, 0.18, 1)
 
 [node name="HotbarLayer" type="CanvasLayer" parent="."]
 layer = 5

@@ -15,7 +15,10 @@ extends CanvasLayer
 
 @onready var hull_meter: HullMeter = $HullMeter
 @onready var battery_meter: BatteryMeter = $BatteryMeter
-@onready var jetpack_meter: JetpackMeter = $JetpackMeter
+@onready var jetpack_meter: Control = get_node_or_null("JetpackMeter")
+@onready var jetpack_bar: Control = get_node_or_null("JetpackBar")
+@onready var jetpack_bar_fill: ColorRect = get_node_or_null("JetpackBar/Fill")
+@onready var jetpack_bar_label: Label = get_node_or_null("JetpackBar/Label")
 @onready var message_label: Label = $MessageLabel
 @onready var interact_prompt: Label = $InteractPrompt
 @onready var objective_caption: Label = $ObjectiveCaption
@@ -29,6 +32,8 @@ extends CanvasLayer
 var _message_timer: float = 0.0
 ## Captured before the bar is ever scaled so we always grow from full width.
 var _salvage_fill_width: float = 0.0
+var _jetpack_bar_width: float = 0.0
+var _jetpack: Node
 var _last_period: StringName = &""
 
 
@@ -38,6 +43,10 @@ func _ready() -> void:
 	interact_prompt.visible = false
 	_salvage_fill_width = salvage_fill.size.x
 	salvage_bar.visible = false
+	if jetpack_bar_fill:
+		_jetpack_bar_width = maxf(jetpack_bar_fill.size.x, 474.0)
+	if jetpack_bar:
+		jetpack_bar.visible = true
 
 	# World objects talk to the HUD through the event bus, never directly.
 	GameEvents.notification_requested.connect(_on_notification_requested)
@@ -71,9 +80,11 @@ func _ready() -> void:
 		if hull.has_signal("state_changed"):
 			hull.connect("state_changed", _on_hull_state_changed)
 
-	var pack := player.get_node_or_null("RobotModel/Jetpack") as RobotJetpack
-	if pack and jetpack_meter:
-		jetpack_meter.bind_jetpack(pack)
+	var pack := player.get_node_or_null("RobotModel/Jetpack")
+	_jetpack = pack
+	if pack and jetpack_meter and jetpack_meter.has_method("bind_jetpack"):
+		jetpack_meter.call("bind_jetpack", pack)
+	_refresh_jetpack_bar()
 
 	var battery := player.get_node_or_null("Battery") as RobotBattery
 	if battery == null:
@@ -90,6 +101,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_refresh_jetpack_bar()
 	if _message_timer <= 0.0:
 		return
 	_message_timer -= delta
@@ -106,6 +118,31 @@ func show_message(text: String, color: Color = Color(1, 1, 1)) -> void:
 	message_label.add_theme_color_override(&"font_color", color)
 	message_label.modulate.a = 1.0
 	_message_timer = message_duration
+
+
+func _refresh_jetpack_bar() -> void:
+	if jetpack_bar == null or jetpack_bar_fill == null:
+		return
+	jetpack_bar.visible = true
+	var ratio := 0.0
+	var thrusting := false
+	if _jetpack:
+		if _jetpack.has_method("get_fuel_ratio"):
+			ratio = clampf(float(_jetpack.call("get_fuel_ratio")), 0.0, 1.0)
+		if _jetpack.has_method("is_bursting"):
+			thrusting = bool(_jetpack.call("is_bursting"))
+	jetpack_bar_fill.size.x = _jetpack_bar_width * ratio
+	if jetpack_bar_label == null:
+		return
+	if thrusting:
+		jetpack_bar_fill.color = Color(1.0, 0.82, 0.35)
+		jetpack_bar_label.text = "JETPACK  %d%%  —  HOLD SPACE" % roundi(ratio * 100.0)
+	elif ratio <= 0.02:
+		jetpack_bar_fill.color = Color(0.45, 0.28, 0.22)
+		jetpack_bar_label.text = "JETPACK EMPTY"
+	else:
+		jetpack_bar_fill.color = Color(1.0, 0.55, 0.18)
+		jetpack_bar_label.text = "JETPACK  %d%%" % roundi(ratio * 100.0)
 
 
 # --- Event bus reactions ----------------------------------------------------

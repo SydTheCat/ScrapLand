@@ -30,7 +30,7 @@
 [ext_resource type="Script" path="res://player/upgrades.gd" id="27_upgrades"]
 [ext_resource type="Resource" path="res://crafting/recipes/cargo_rack.tres" id="28_r_rack"]
 [ext_resource type="Resource" path="res://crafting/recipes/hull_plating.tres" id="29_r_plate"]
-[ext_resource type="Script" uid="uid://c8njetpkrocky1" path="res://player/jetpack.gd" id="31_jetpack"]
+[ext_resource type="Script" path="res://player/jetpack.gd" id="31_jetpack"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_player"]
 radius = 0.3

@@ -84,7 +84,7 @@ var _floor_snap: float = 0.3
 @onready var flashlight: SpotLight3D = get_node_or_null("RobotModel/Head/Flashlight") as SpotLight3D
 ## Where crafted tools get attached later (salvage tool, mining arm, ...).
 @onready var tool_attachment: Node3D = get_node_or_null("RobotModel/ArmRight/ToolAttachment") as Node3D
-@onready var jetpack: RobotJetpack = get_node_or_null("RobotModel/Jetpack") as RobotJetpack
+@onready var jetpack: Node = get_node_or_null("RobotModel/Jetpack")
 ## Optional: nothing breaks while there are no animations yet.
 var _anim: AnimationPlayer
 
@@ -138,9 +138,10 @@ func _physics_process(delta: float) -> void:
 	var direction := _get_move_direction()
 	_apply_horizontal_movement(direction, delta)
 	var jumped := _try_jump()
-	if jetpack:
-		jetpack.tick(delta, jumped)
-		floor_snap_length = 0.0 if jetpack.is_bursting() else _floor_snap
+	if jetpack and jetpack.has_method("tick"):
+		jetpack.call("tick", delta, jumped)
+	var bursting := jetpack != null and jetpack.has_method("is_bursting") and bool(jetpack.call("is_bursting"))
+	floor_snap_length = 0.0 if bursting else _floor_snap
 
 	move_and_slide()
 
