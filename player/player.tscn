@@ -119,7 +119,7 @@ metallic = 0.7
 roughness = 0.4
 emission_enabled = true
 emission = Color(1, 0.4, 0.12, 1)
-emission_energy_multiplier = 0.45
+emission_energy_multiplier = 1.35
 
 [sub_resource type="StandardMaterial3D" id="Mat_pack_nozzle"]
 albedo_color = Color(0.18, 0.19, 0.22, 1)
@@ -257,7 +257,7 @@ process_material = SubResource("Spark_process")
 draw_pass_1 = SubResource("Mesh_spark")
 
 [node name="Jetpack" type="Node3D" parent="RobotModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.34)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.52, 0.4)
 script = ExtResource("31_jetpack")
 
 [node name="Tank" type="MeshInstance3D" parent="RobotModel/Jetpack"]

@@ -46,6 +46,10 @@ var _battery: Node
 var _beeper: Node
 var _floor_snap: float = 0.3
 var _last_tick_frame: int = -1
+var _hud_fill: ColorRect
+var _hud_label: Label
+var _hud_track_width: float = 494.0
+var _glow_idle: float = 0.45
 
 
 func _ready() -> void:
@@ -64,9 +68,14 @@ func _ready() -> void:
 	if _glow:
 		if _glow.light_energy > 0.01:
 			_glow_energy = _glow.light_energy
-		_glow.light_energy = 0.0
+		_glow.light_energy = _glow_idle
 	_set_fx(false)
 	fuel_changed.emit(_fuel, max_fuel)
+	call_deferred("_build_hud")
+
+
+func _process(_delta: float) -> void:
+	_update_hud()
 
 
 ## Player may call this before move_and_slide so thrust applies the same frame.
@@ -228,7 +237,7 @@ func _set_fx(on: bool) -> void:
 		if on:
 			p.restart()
 	if _glow:
-		_glow.light_energy = _glow_energy if on else 0.0
+		_glow.light_energy = _glow_energy if on else _glow_idle
 
 
 func _notify_empty() -> void:
@@ -258,3 +267,78 @@ func _find_body() -> CharacterBody3D:
 			return n as CharacterBody3D
 		n = n.get_parent()
 	return null
+
+
+## Built on the player so the bar shows in every level that instances Rocky,
+## not only world.tscn's HUD.
+func _build_hud() -> void:
+	if _hud_fill:
+		return
+	var layer := CanvasLayer.new()
+	layer.name = "JetpackHud"
+	layer.layer = 12
+	var host: Node = _body if _body else self
+	host.add_child(layer)
+
+	var bar := Control.new()
+	bar.name = "Bar"
+	bar.anchor_left = 0.5
+	bar.anchor_right = 0.5
+	bar.anchor_top = 1.0
+	bar.anchor_bottom = 1.0
+	bar.offset_left = -250.0
+	bar.offset_right = 250.0
+	bar.offset_top = -136.0
+	bar.offset_bottom = -80.0
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.add_child(bar)
+
+	var label := Label.new()
+	label.anchor_right = 1.0
+	label.offset_bottom = 24.0
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override(&"font_size", 18)
+	label.add_theme_color_override(&"font_color", Color(1.0, 0.72, 0.28))
+	label.add_theme_color_override(&"font_outline_color", Color(0, 0, 0, 0.92))
+	label.add_theme_constant_override(&"outline_size", 7)
+	label.text = "JETPACK  100%"
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(label)
+	_hud_label = label
+
+	var track := ColorRect.new()
+	track.offset_top = 26.0
+	track.offset_right = 500.0
+	track.offset_bottom = 52.0
+	track.color = Color(0.04, 0.04, 0.06, 0.92)
+	track.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(track)
+
+	var fill := ColorRect.new()
+	fill.offset_left = 3.0
+	fill.offset_top = 29.0
+	fill.offset_right = 497.0
+	fill.offset_bottom = 49.0
+	fill.color = Color(1.0, 0.55, 0.18, 1)
+	fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(fill)
+	_hud_fill = fill
+	_hud_track_width = 494.0
+	_update_hud()
+
+
+func _update_hud() -> void:
+	if _hud_fill == null or _hud_label == null:
+		return
+	var ratio := get_fuel_ratio()
+	_hud_fill.size.x = _hud_track_width * ratio
+	if _bursting:
+		_hud_fill.color = Color(1.0, 0.85, 0.35)
+		_hud_label.text = "JETPACK  %d%%  —  HOLD SPACE" % roundi(ratio * 100.0)
+	elif ratio <= 0.02:
+		_hud_fill.color = Color(0.45, 0.28, 0.22)
+		_hud_label.text = "JETPACK EMPTY"
+	else:
+		_hud_fill.color = Color(1.0, 0.55, 0.18)
+		_hud_label.text = "JETPACK  %d%%" % roundi(ratio * 100.0)
