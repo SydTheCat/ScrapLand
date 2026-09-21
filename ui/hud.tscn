@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://ui/hud.gd" id="1_hud"]
 [ext_resource type="PackedScene" path="res://ui/battery_meter.tscn" id="2_meter"]
 [ext_resource type="PackedScene" path="res://ui/tool_slots.tscn" id="3_tool_slots"]
 [ext_resource type="PackedScene" path="res://ui/clock_readout.tscn" id="4_clock"]
 [ext_resource type="PackedScene" path="res://ui/hull_meter.tscn" id="5_hull"]
+[ext_resource type="PackedScene" path="res://ui/jetpack_meter.tscn" id="6_jetpack"]
 
 [sub_resource type="StyleBoxFlat" id="Style_salvage_track"]
 bg_color = Color(0.05, 0.06, 0.08, 0.85)
@@ -155,6 +156,16 @@ offset_left = -264.0
 offset_top = 168.0
 offset_right = -24.0
 offset_bottom = 240.0
+grow_horizontal = 0
+
+[node name="JetpackMeter" parent="." instance=ExtResource("6_jetpack")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 248.0
+offset_right = -24.0
+offset_bottom = 320.0
 grow_horizontal = 0
 
 [node name="HotbarLayer" type="CanvasLayer" parent="."]

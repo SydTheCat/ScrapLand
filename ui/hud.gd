@@ -5,7 +5,7 @@ extends CanvasLayer
 ## the "player" group, so it needs no configuration and does not care where the
 ## player sits in the scene tree.
 ##
-## Owns the clock, hull and battery cluster, the message line, the objective,
+## Owns the clock, hull, battery and jetpack cluster, the message line, the objective,
 ## the interact prompt, the salvage bar, the hotbar, and the shutdown overlay.
 
 @export_group("Messages")
@@ -15,6 +15,7 @@ extends CanvasLayer
 
 @onready var hull_meter: HullMeter = $HullMeter
 @onready var battery_meter: BatteryMeter = $BatteryMeter
+@onready var jetpack_meter: JetpackMeter = $JetpackMeter
 @onready var message_label: Label = $MessageLabel
 @onready var interact_prompt: Label = $InteractPrompt
 @onready var objective_caption: Label = $ObjectiveCaption
@@ -69,6 +70,10 @@ func _ready() -> void:
 		hull_meter.bind_hull(hull)
 		if hull.has_signal("state_changed"):
 			hull.connect("state_changed", _on_hull_state_changed)
+
+	var pack := player.get_node_or_null("RobotModel/Jetpack") as RobotJetpack
+	if pack and jetpack_meter:
+		jetpack_meter.bind_jetpack(pack)
 
 	var battery := player.get_node_or_null("Battery") as RobotBattery
 	if battery == null:

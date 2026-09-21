@@ -6,7 +6,7 @@ class_name Player
 ##   * camera-relative movement with mechanical acceleration / braking
 ##   * turning the robot body toward the direction it is travelling
 ##   * jumping (with a short coyote-time grace window)
-##   * a backpack jetpack that fires short aerial spurts (see jetpack.gd)
+##   * a backpack jetpack that burns a short tank while Space is held in the air
 ##   * the head-mounted flashlight
 ##   * emitting signals that other systems will listen to later
 ##
